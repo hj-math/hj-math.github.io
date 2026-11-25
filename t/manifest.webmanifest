@@ -1,7 +1,7 @@
 {
  "id": "./",
- "name": "질문관리 · 선생님",
- "short_name": "질문관리",
+ "name": "질문·H5",
+ "short_name": "질문·H5",
  "start_url": "./?app=1",
  "scope": "./",
  "display": "standalone",
