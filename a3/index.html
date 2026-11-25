@@ -1,0 +1,58 @@
+<!doctype html><html lang="ko"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>질문·H5</title>
+<link rel="manifest" href="manifest.webmanifest">
+<link rel="icon" href="../icon-192.png"><link rel="apple-touch-icon" href="../icon-180.png">
+<meta name="apple-mobile-web-app-title" content="질문·H5"><meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="theme-color" content="#1a4fd0">
+<script>
+
+var TARGET = "https://script.google.com/macros/s/AKfycbxjb1lhGBwB_EK6MaEa2hzrxqkjD56IYyRwzgLrKzq2Qv6nVJBbD0pZ1dUdG6jf0qjj/exec?ban=A3";
+var NKEY = "h5_name_a3";   // 학생 이름을 이 앱에 기억 (반별)
+// 홈 화면 아이콘으로 열었는지(설치된 앱)
+var fromIcon = location.search.indexOf('app=1') >= 0 || (window.matchMedia && matchMedia('(display-mode: standalone)').matches) || navigator.standalone;
+function ls(k, v) { try { if (v === undefined) return localStorage.getItem(k) || ''; if (v) localStorage.setItem(k, v); else localStorage.removeItem(k); } catch (e) { return ''; } }
+/** 앱 화면을 이 페이지 안에 꽉 차게 띄움 (구글 안내 문구·주소 표시줄 없이) */
+function runApp() {
+  if (!TARGET) return;
+  var src = TARGET + (NKEY && ls(NKEY) ? '&n=' + encodeURIComponent(ls(NKEY)) : '');
+  document.body.innerHTML = '';
+  document.body.style.cssText = 'margin:0;overflow:hidden;background:#f3f4f6';
+  var f = document.createElement('iframe');
+  f.src = src; f.setAttribute('allow', 'clipboard-write');
+  f.style.cssText = 'position:fixed;inset:0;width:100%;height:100%;border:0';
+  document.body.appendChild(f);
+}
+window.addEventListener('message', function (e) {   // 앱에서 이름을 고르거나 바꾸면 기억
+  if (!NKEY || !/(googleusercontent\.com|script\.google\.com)$/.test(e.origin)) return;
+  if (e.data && typeof e.data.h5name === 'string') ls(NKEY, e.data.h5name);
+});
+</script>
+<style>*{box-sizing:border-box}body{margin:0;background:#f3f4f6;color:#1f2328;font-family:-apple-system,BlinkMacSystemFont,"Apple SD Gothic Neo","Malgun Gothic","Noto Sans KR",sans-serif}
+.w{max-width:440px;margin:0 auto;padding:28px 18px 40px;text-align:center}
+.ic{width:112px;height:112px;border-radius:26px;box-shadow:0 6px 18px rgba(26,79,208,.3)}
+h1{font-size:24px;margin:14px 0 2px}.c{color:#667;font-size:15px}
+.card{background:#fff;border-radius:16px;padding:18px;margin-top:18px;text-align:left}
+.card h2{font-size:16px;margin:0 0 10px}.card ol{margin:0;padding-left:20px;line-height:1.9;font-size:15px}
+.b{display:block;width:100%;padding:15px;border:none;border-radius:12px;font-size:17px;font-weight:700;margin-top:12px;cursor:pointer;text-decoration:none;text-align:center;font-family:inherit}
+.pri{background:#1a73e8;color:#fff}.sec{background:#fff;color:#1557b0;border:1px solid #1a73e8}
+.hide{display:none}.note{font-size:13px;color:#8a8f98;margin-top:14px;line-height:1.6}</style></head><body><div class="w">
+<img class="ic" src="../icon-512.png" alt="">
+<h1>질문·H5</h1><div class="c">예비고1 A3 · 숙제 질문 · H5</div>
+
+<button id="inst" class="b pri hide">📲 앱 설치하기</button>
+<div class="card" id="and"><h2>갤럭시 · 크롬</h2><ol><li>오른쪽 위 <b>⋮</b> 누르기</li><li><b>설치 및 바로가기 만들기</b> → <b>설치</b> (또는 <b>홈 화면에 추가</b>)</li><li>홈 화면의 <b>손바닥 아이콘</b>으로 열기</li></ol></div>
+<div class="card" id="ios"><h2>아이폰 · 사파리</h2><ol><li>아래 가운데 <b>공유</b>(네모에 ↑) 누르기</li><li><b>홈 화면에 추가</b> → <b>추가</b></li><li>홈 화면의 <b>손바닥 아이콘</b>으로 열기</li></ol></div>
+<a class="b sec" id="open" href="#">설치 없이 바로 열기</a>
+<div class="note">예전에 만든 회색 G 아이콘이 있으면 길게 눌러 지워 주세요.</div>
+</div>
+<script>
+document.getElementById('open').onclick = function (e) { e.preventDefault(); runApp(); };
+if (fromIcon && TARGET) runApp();
+var ua = navigator.userAgent, isIOS = /iPhone|iPad|iPod/.test(ua);
+if (isIOS) { var A = document.getElementById('and'); A.parentNode.insertBefore(document.getElementById('ios'), A); }   // 두 안내 모두 보이고, 내 폰 안내가 먼저
+var ev = null;
+window.addEventListener('beforeinstallprompt', function (e) { e.preventDefault(); ev = e; document.getElementById('inst').classList.remove('hide'); });
+document.getElementById('inst').onclick = function () { if (ev) { ev.prompt(); ev = null; } };
+if ('serviceWorker' in navigator) navigator.serviceWorker.register('../sw.js', { scope: './' }).catch(function () {});
+</script></body></html>
