@@ -135,6 +135,7 @@ a.line{display:block;color:#1a73e8}
 <script>
 window.SHELL = true;
 var SHELL_EXEC = "https://script.google.com/macros/s/AKfycbxjb1lhGBwB_EK6MaEa2hzrxqkjD56IYyRwzgLrKzq2Qv6nVJBbD0pZ1dUdG6jf0qjj/exec", SHELL_VER = "v8_1127", SHELL_T0 = Date.now();
+['pointerdown', 'keydown'].forEach(function (ev) { window.addEventListener(ev, function () { window.__touched = true; }, true); });
 // 새 버전 확인: 구글 응답의 버전(v)이 이 화면 버전과 다르면 → 새 화면을 받아 저장하고 바로 새로 고침
 // (열자마자면 바로, 쓰는 중이면 입력이 날아가지 않게 위에 '새로 고침' 띠만 띄움)
 function SHELL_UPDATE(v) {
@@ -149,7 +150,7 @@ function SHELL_UPDATE(v) {
       }));
     }) : Promise.resolve();
     put.catch(function () {}).then(function () {
-      if (Date.now() - SHELL_T0 < 6000) { location.reload(); return; }
+      if (!window.__touched || Date.now() - SHELL_T0 < 6000) { location.reload(); return; }   // 아직 아무것도 안 눌렀으면 바로 새로 고침
       var b = document.createElement('div');
       b.textContent = '앱이 업데이트됐어요 · 눌러서 새로 고침';
       b.style.cssText = 'position:fixed;left:0;right:0;top:0;z-index:99;background:#1a4fd0;color:#fff;text-align:center;padding:12px;font-size:15px;font-weight:700;cursor:pointer';
