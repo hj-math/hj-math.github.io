@@ -2,6 +2,7 @@
 <html><head><meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"><meta charset="utf-8"><base target="_top">
 <style>
 *{box-sizing:border-box}
+.grading{display:flex;align-items:center;justify-content:center;gap:10px;margin-top:12px;font-size:15px;font-weight:700;color:#1a4fd0}.spin{width:20px;height:20px;border:3px solid #d0d4da;border-top-color:#1a4fd0;border-radius:50%;animation:spn .8s linear infinite}@keyframes spn{to{transform:rotate(360deg)}}
 body{margin:0;background:#f3f4f6;color:#1f2328;font-family:-apple-system,BlinkMacSystemFont,"Apple SD Gothic Neo","Malgun Gothic","Noto Sans KR",sans-serif;-webkit-tap-highlight-color:transparent}
 .wrap{max-width:480px;margin:0 auto;padding:14px 14px 40px}
 .card{background:#fff;border-radius:14px;padding:16px;margin-bottom:12px}
@@ -174,7 +175,7 @@ body{margin:0;background:#f3f4f6;color:#1f2328;font-family:-apple-system,BlinkMa
 <body><div class="wrap" id="app"><div class="center">불러오는 중…</div></div>
 <script>
 window.SHELL = true;
-var SHELL_EXEC = "https://script.google.com/macros/s/AKfycbxjb1lhGBwB_EK6MaEa2hzrxqkjD56IYyRwzgLrKzq2Qv6nVJBbD0pZ1dUdG6jf0qjj/exec", SHELL_VER = "v8_1127", SHELL_T0 = Date.now();
+var SHELL_EXEC = "https://script.google.com/macros/s/AKfycbxjb1lhGBwB_EK6MaEa2hzrxqkjD56IYyRwzgLrKzq2Qv6nVJBbD0pZ1dUdG6jf0qjj/exec", SHELL_VER = "v8_1127-2", SHELL_T0 = Date.now();
 ['pointerdown', 'keydown'].forEach(function (ev) { window.addEventListener(ev, function () { window.__touched = true; }, true); });
 // 새 버전 확인: 구글 응답의 버전(v)이 이 화면 버전과 다르면 → 새 화면을 받아 저장하고 바로 새로 고침
 // (열자마자면 바로, 쓰는 중이면 입력이 날아가지 않게 위에 '새로 고침' 띠만 띄움)
@@ -935,7 +936,7 @@ function render() {
     keys.forEach(function (k) { card.appendChild(rowFor(k)); if (S.open === k) card.appendChild(panelFor(k)); });
   }
 
-  var label = S.busy ? '제출하는 중…' : (S.saved ? '수정해서 다시 제출' : '제출') + (keys.length ? ' (질문 ' + keys.length + '개)' : ' (질문 없음)');
+  var label = S.busy ? (S.optim ? '제출했어요 ✓' : '제출하는 중…') : (S.saved ? '수정해서 다시 제출' : '제출') + (keys.length ? ' (질문 ' + keys.length + '개)' : ' (질문 없음)');
   var btn = h('button', { 'class': 'submit', text: label, onclick: submit });
   if (S.busy) btn.disabled = true;
   card.appendChild(btn);
@@ -1054,9 +1055,9 @@ function h5Confirm() {
     list,
     h('div', { 'class': 'two' }, [
       h('button', { 'class': 'sub2', text: '다시 고치기', onclick: function () { H.view = 'input'; H.msg = ''; renderH5View(); } }),
-      h('button', { 'class': 'submit', style: 'margin-top:0', text: H.busy ? '제출하는 중…' : '제출', onclick: h5Submit })
+      h('button', { 'class': 'submit', style: 'margin-top:0', text: H.busy ? '채점하는 중…' : '제출', onclick: h5Submit })
     ]),
-    h5Msg()
+    H.busy ? h('div', { 'class': 'grading' }, [h('span', { 'class': 'spin' }), h('span', { text: '채점하고 있어요. 잠깐만 기다려 주세요…' })]) : h5Msg()
   ]);
 }
 
@@ -1246,22 +1247,28 @@ function submit() {
   if (S.busy) return;
   if (!S.progress) { S.needProg = true; S.msg = '숙제를 얼마나 했는지 먼저 눌러 주세요.'; S.msgCls = 'err'; render(); window.scrollTo(0, 0); return; }
   var items = sortedKeys().map(function (k) { var s = S.sel[k]; return { p: s.p, q: s.q, tag: s.tag, memo: s.memo }; });
-  S.busy = true; S.msg = ''; render();
+  // v8: 누르자마자 '제출했어요'를 보여 주고 저장은 뒤에서. 저장에 실패하면 다시 내라고 알려 줌
+  var prevSaved = S.saved, d0 = new Date(), pad = function (x) { return (x < 10 ? '0' : '') + x; };
+  S.busy = true; S.optim = true; S.open = null;
+  S.saved = (d0.getMonth() + 1) + '/' + d0.getDate() + ' ' + pad(d0.getHours()) + ':' + pad(d0.getMinutes());
+  S.msg = items.length ? '제출했어요! (질문 ' + items.length + '개)' : '제출했어요!'; S.msgCls = 'ok'; render();
+  function undo(m) { S.saved = prevSaved; S.msg = m; S.msgCls = 'err'; render(); }   // 경고는 제출 버튼 바로 아래에 보임
   google.script.run.withSuccessHandler(function (r) {
-    S.busy = false;
+    S.busy = false; S.optim = false;
     if (r && r.ok) {
-      S.saved = r.time; S.open = null; S.peer = r.peer; if (r.me) S.me = r.me;
+      S.saved = r.time; S.peer = r.peer; if (r.me) S.me = r.me;
       S.msg = r.count ? '제출했어요! (질문 ' + r.count + '개)' : '제출했어요!';
       S.msgCls = 'ok'; render();
     } else if (r && r.reason === 'auth') {
+      S.saved = prevSaved;
       authLost(r);
     } else if (r && r.reason === 'round') {
       center(r.message); setTimeout(start, 1500);
     } else {
-      S.msg = (r && r.message) || '제출하지 못했어요. 다시 눌러 주세요.'; S.msgCls = 'err'; render();
+      undo('⚠️ 제출이 저장되지 않았어요. ' + ((r && r.message) || '다시 눌러 주세요.'));
     }
   }).withFailureHandler(function () {
-    S.busy = false; S.msg = '인터넷 연결을 확인하고 다시 눌러 주세요.'; S.msgCls = 'err'; render();
+    S.busy = false; S.optim = false; undo('⚠️ 제출이 저장되지 않았어요. 인터넷 연결을 확인하고 다시 눌러 주세요.');
   }).apiSubmit(CODE, S.d.round.id, S.name, S.progress, items, S.tok);
 }
 
