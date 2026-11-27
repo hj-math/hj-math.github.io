@@ -33,8 +33,19 @@ function runApp(src) {
   frame.src = src;
 }
 function fromApp(e) { return /(googleusercontent\.com|script\.google\.com)$/.test(e.origin) && e.data && typeof e.data === 'object'; }
-var K = '';
-try { if (location.hash.length > 2) { localStorage.setItem('h5_tkey', location.hash.slice(1)); history.replaceState(null, '', location.pathname + location.search); } K = localStorage.getItem('h5_tkey') || ''; } catch (e) {}
+var K = '', IOS_T = /iPhone|iPad|iPod/.test(navigator.userAgent);
+try {
+  var qk = (location.search.match(/[?&]k=([^&]+)/) || [])[1];
+  var hk = location.hash.length > 2 ? location.hash.slice(1) : '';
+  if (hk || qk) localStorage.setItem('h5_tkey', decodeURIComponent(hk || qk));
+  K = localStorage.getItem('h5_tkey') || '';
+  // 아이폰: 사파리와 홈 화면 앱은 저장 공간이 따로라, 홈 화면에 추가할 주소에 키를 남겨 둠(?k=). 그 밖에는 주소에서 키를 지움
+  if (IOS_T && K && !fromIcon) history.replaceState(null, '', location.pathname + '?k=' + encodeURIComponent(K));
+  else if (hk || qk) history.replaceState(null, '', location.pathname + (fromIcon ? '?app=1' : ''));
+} catch (e) {}
+if (IOS_T && K) {   // 아이폰은 앱 정보 파일 대신 지금 주소(?k=…)로 홈 화면에 추가되게 함
+  var ml = document.querySelector('link[rel="manifest"]'); if (ml) ml.parentNode.removeChild(ml);
+}
 var READY = !!K;
 function target() { return K ? EXEC + '?t=' + encodeURIComponent(K) + '&app=1' : ''; }
 window.addEventListener('message', function (e) {   // [👀 학생 화면] 체험 열기 / 끝내기
@@ -56,7 +67,7 @@ h1{font-size:24px;margin:14px 0 2px}.c{color:#667;font-size:15px}
 .tip{font-size:13px;color:#667;margin-top:10px;line-height:1.6;border-top:1px solid #eef0f2;padding-top:10px}.pri{background:#e8650f}.sec{color:#b45309;border-color:#e8650f}</style></head><body><div class="w">
 <img class="ic" src="./icon-512.png" alt="">
 <h1>질문·H5 쌤</h1><div class="c">선생님용</div>
-<div class="card" id="kst"></div><script>document.getElementById('kst').innerHTML = K ? '✅ 이 폰에 교사용 키가 저장돼 있어요.' : '⚠️ 교사용 키가 없어요. 교사용 링크의 <b>?t=</b> 뒤 글자를 이 주소 끝에 <b>#</b>을 붙여 한 번 열어 주세요.';</script>
+<div class="card" id="kst"></div><script>document.getElementById('kst').innerHTML = K ? (IOS_T ? '✅ 교사용 키를 확인했어요. <b>이 화면 그대로</b> 아래 순서로 홈 화면에 추가하세요.' : '✅ 이 폰에 교사용 키가 저장돼 있어요.') : '⚠️ 교사용 키가 없어요. 교사용 링크의 <b>?t=</b> 뒤 글자를 이 주소 끝에 <b>#</b>을 붙여 한 번 열어 주세요.';</script>
 <button id="inst" class="b pri hide">📲 앱 설치하기</button>
 <div class="card hide" id="kakao"><h2>카톡에서 열었어요</h2><ol><li>오른쪽 위(아이폰은 오른쪽 아래) <b>⋮</b> 또는 <b>공유</b> 누르기</li><li><b>다른 브라우저로 열기</b>(아이폰은 <b>Safari로 열기</b>)</li><li>열린 화면에서 설치하기</li></ol></div>
 <div class="card" id="and"><h2>갤럭시 · 크롬</h2><ol><li>오른쪽 위 <b>⋮</b> 누르기</li><li><b>설치 및 바로가기 만들기</b> → <b>설치</b> (또는 <b>홈 화면에 추가</b>)</li><li>홈 화면의 <b>손바닥 아이콘</b>으로 열기</li></ol></div>
