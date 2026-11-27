@@ -1,7 +1,7 @@
 <!doctype html><html lang="ko"><head><meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
 <title>질문·H5 쌤</title>
-<link rel="manifest" href="manifest.webmanifest?v=3">
+<link rel="manifest" href="manifest.webmanifest?v=4">
 <link rel="icon" href="./icon-192.png"><link rel="apple-touch-icon" href="./icon-180.png">
 <meta name="apple-mobile-web-app-title" content="질문·H5 쌤"><meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="theme-color" content="#d9590b">
@@ -32,7 +32,7 @@ function runApp(src) {
   }
   frame.src = src;
 }
-function fromApp(e) { return /(googleusercontent\.com|script\.google\.com)$/.test(e.origin) && e.data && typeof e.data === 'object'; }
+function fromApp(e) { return (e.origin === location.origin || /(googleusercontent\.com|script\.google\.com)$/.test(e.origin)) && e.data && typeof e.data === 'object'; }
 var K = '', IOS_T = /iPhone|iPad|iPod/.test(navigator.userAgent);
 try {
   var qk = (location.search.match(/[?&]k=([^&]+)/) || [])[1];
@@ -47,10 +47,11 @@ if (IOS_T && K) {   // 아이폰은 앱 정보 파일 대신 지금 주소(?k=�
   var ml = document.querySelector('link[rel="manifest"]'); if (ml) ml.parentNode.removeChild(ml);
 }
 var READY = !!K;
-function target() { return K ? EXEC + '?t=' + encodeURIComponent(K) + '&app=1' : ''; }
+function target() { return K ? '../app/t.html?app=1' : ''; }
 window.addEventListener('message', function (e) {   // [👀 학생 화면] 체험 열기 / 끝내기
   if (!fromApp(e)) return;
   if (typeof e.data.h5open === 'string' && e.data.h5open.indexOf(EXEC + '?') === 0) runApp(e.data.h5open);
+  if (typeof e.data.h5demo === 'string' && /^[A-Za-z0-9_-]+$/.test(e.data.h5demo)) runApp('../app/s.html?ban=' + encodeURIComponent(e.data.h5demo) + '&demo=1&app=1');
   if (e.data.h5back) runApp(target());
 });
 </script>
@@ -87,6 +88,6 @@ var ev = null;
 window.addEventListener('beforeinstallprompt', function (e) { var b = document.getElementById('inst'); if (!b) return; e.preventDefault(); ev = e; b.classList.remove('hide'); show('and', false); show('ios', false); });
 window.addEventListener('appinstalled', function () { var b = document.getElementById('inst'); if (b) b.textContent = '✅ 설치됐어요! 홈 화면의 손바닥 아이콘으로 여세요'; });
 document.getElementById('inst').onclick = function () { if (ev) { ev.prompt(); ev = null; } };
-if ('serviceWorker' in navigator) navigator.serviceWorker.register('../sw.js', { scope: './' }).catch(function () {});
+if ('serviceWorker' in navigator) navigator.serviceWorker.register('../sw.js', { scope: '../' }).catch(function () {});
 if (fromIcon && READY) runApp();   // 아이콘으로 열면 바로 앱 화면
 </script></body></html>

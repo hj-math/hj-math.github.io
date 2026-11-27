@@ -1,7 +1,7 @@
 <!doctype html><html lang="ko"><head><meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
 <title>질문·H5</title>
-<link rel="manifest" href="manifest.webmanifest?v=3">
+<link rel="manifest" href="manifest.webmanifest?v=4">
 <link rel="icon" href="../icon-192.png"><link rel="apple-touch-icon" href="../icon-180.png">
 <meta name="apple-mobile-web-app-title" content="질문·H5"><meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="theme-color" content="#1a4fd0">
@@ -32,13 +32,29 @@ function runApp(src) {
   }
   frame.src = src;
 }
-function fromApp(e) { return /(googleusercontent\.com|script\.google\.com)$/.test(e.origin) && e.data && typeof e.data === 'object'; }
+function fromApp(e) { return (e.origin === location.origin || /(googleusercontent\.com|script\.google\.com)$/.test(e.origin)) && e.data && typeof e.data === 'object'; }
 var DEFAULT_BAN = "A3", SHARED = false, READY = true;
 function target() {
-  if (SHARED) return EXEC + '?ban=&shared=1&app=1';
+  if (SHARED) return '../app/s.html?ban=&shared=1&app=1';
   var ban = ls('h5_ban') || DEFAULT_BAN, n = ban ? ls('h5_name_' + ban.toLowerCase()) : '';
-  return EXEC + '?ban=' + encodeURIComponent(ban) + '&app=1' + (n ? '&n=' + encodeURIComponent(n) : '');
+  return '../app/s.html?ban=' + encodeURIComponent(ban) + '&app=1' + (n ? '&n=' + encodeURIComponent(n) : '');
 }
+// v7 처음 한 번: 예전 앱(구글 주소)에 저장된 로그인을 새 앱으로 옮김 → 학생이 비밀번호를 다시 넣지 않아도 됨
+var runApp0 = runApp;
+runApp = function (src) {
+  if (SHARED || ls('h5_mig')) return runApp0(src);
+  runApp0('about:blank');   // 안내 화면을 먼저 띄움
+  var done = false, hid = document.createElement('iframe');
+  function go(o) {
+    if (done) return; done = true; ls('h5_mig', '1');
+    try { Object.keys(o || {}).forEach(function (k) { if (/^(qtok_|qname_|q_ban$)/.test(k) && !localStorage.getItem(k)) localStorage.setItem(k, String(o[k])); }); } catch (e) {}
+    if (hid.parentNode) hid.parentNode.removeChild(hid);
+    runApp0(src);
+  }
+  window.addEventListener('message', function (e) { if (fromApp(e) && e.data.h5mig && typeof e.data.h5mig === 'object') go(e.data.h5mig); });
+  hid.style.display = 'none'; hid.src = EXEC + '?mig=1'; document.body.appendChild(hid);
+  setTimeout(function () { go(null); }, 8000);
+};
 window.addEventListener('message', function (e) {   // 앱에서 반·이름을 고르거나 바꾸면 이 기기에 기억 (공용 앱은 기억 안 함)
   if (SHARED || !fromApp(e) || typeof e.data.h5name !== 'string' || !e.data.ban) return;
   ls('h5_ban', e.data.ban); ls('h5_name_' + String(e.data.ban).toLowerCase(), e.data.h5name);
@@ -77,6 +93,6 @@ var ev = null;
 window.addEventListener('beforeinstallprompt', function (e) { var b = document.getElementById('inst'); if (!b) return; e.preventDefault(); ev = e; b.classList.remove('hide'); show('and', false); show('ios', false); });
 window.addEventListener('appinstalled', function () { var b = document.getElementById('inst'); if (b) b.textContent = '✅ 설치됐어요! 홈 화면의 손바닥 아이콘으로 여세요'; });
 document.getElementById('inst').onclick = function () { if (ev) { ev.prompt(); ev = null; } };
-if ('serviceWorker' in navigator) navigator.serviceWorker.register('../sw.js', { scope: './' }).catch(function () {});
+if ('serviceWorker' in navigator) navigator.serviceWorker.register('../sw.js', { scope: '../' }).catch(function () {});
 if (fromIcon && READY) runApp();   // 아이콘으로 열면 바로 앱 화면
 </script></body></html>

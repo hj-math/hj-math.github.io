@@ -1,0 +1,1142 @@
+<!DOCTYPE html>
+<html><head><meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"><meta charset="utf-8"><base target="_top">
+<style>
+*{box-sizing:border-box}
+body{margin:0;background:#f3f4f6;color:#1f2328;font-family:-apple-system,BlinkMacSystemFont,"Apple SD Gothic Neo","Malgun Gothic","Noto Sans KR",sans-serif;-webkit-tap-highlight-color:transparent}
+.wrap{max-width:720px;margin:0 auto;padding:12px 12px 48px}
+.card{background:#fff;border-radius:14px;padding:14px;margin-bottom:10px}
+.seg{display:flex;gap:6px;overflow-x:auto;margin-bottom:10px}
+.seg button{flex:0 0 auto;border:1px solid #d0d4da;background:#fff;border-radius:999px;padding:8px 14px;font-size:14px;color:#1f2328;cursor:pointer}
+.seg button.on{background:#1f2328;border-color:#1f2328;color:#fff}
+.tabs{display:grid;grid-template-columns:repeat(5,1fr);background:#e7e9ec;border-radius:10px;padding:3px;margin-bottom:10px}
+.tabs button{border:none;background:none;padding:9px 0;font-size:13px;border-radius:8px;color:#4b5058;cursor:pointer;white-space:nowrap}
+.tabs button.on{background:#fff;color:#1f2328;font-weight:700}
+.sub{font-size:13px;color:#667}
+.big{font-size:17px;font-weight:700;margin:2px 0}
+.due{display:inline-block;font-size:13px;font-weight:700;color:#1557b0;background:#e7f0fe;border-radius:8px;padding:3px 9px;margin-top:6px}
+.due.old{color:#8a5300;background:#fef3e0}
+select{width:100%;padding:9px;border:1px solid #d0d4da;border-radius:10px;font-size:14px;background:#fff;margin-top:8px}
+.metrics{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin-top:12px}
+.m{background:#f6f8fa;border-radius:10px;padding:10px;text-align:center}
+.m b{display:block;font-size:20px}
+.m span{font-size:12px;color:#667}
+.line{font-size:13px;margin-top:8px;line-height:1.6}
+.red{color:#c5221f}.amber{color:#8a5300}.green{color:#188038}.muted{color:#8a8f98}
+.order{font-size:14px;margin-top:10px;padding:9px 11px;background:#f6f8fa;border-radius:10px;line-height:1.7}
+.p{border-top:1px solid #eef0f2;padding:12px 0}
+.p:first-child{border-top:none;padding-top:2px}
+.ph{display:flex;align-items:baseline;gap:8px}
+.qn{font-size:18px;font-weight:800;min-width:52px}
+.cnt{font-size:14px;font-weight:700;color:#1557b0}
+.names{font-size:14px;margin-top:4px}
+.tg{display:inline-block;font-size:12px;background:#f1f2f4;color:#4b5058;border-radius:999px;padding:2px 9px;margin:6px 4px 0 0}
+.note{font-size:13px;margin-top:6px;padding-left:10px;border-left:3px solid #d0d4da;line-height:1.5}
+.note b{font-weight:700}
+.sr{display:flex;gap:10px;align-items:flex-start;border-top:1px solid #eef0f2;padding:10px 0;font-size:14px}
+.sr:first-child{border-top:none}
+.sr .n{min-width:64px;font-weight:700}
+.sr .v{flex:1}
+.sr .tm{font-size:12px;color:#8a8f98;white-space:nowrap}
+.tbl{width:100%;border-collapse:collapse;font-size:13px}
+.tbl th{font-size:12px;color:#667;font-weight:600;text-align:center;padding:6px 3px;border-bottom:1px solid #e3e5e8}
+.tbl td{text-align:center;padding:8px 3px;border-bottom:1px solid #f0f1f3}
+.tbl td:first-child,.tbl th:first-child{text-align:left}
+.scroll{overflow-x:auto}
+label{display:block;font-size:13px;color:#4b5058;margin-top:12px}
+input[type=text],input[type=number],input[type=date],textarea{width:100%;padding:10px;border:1px solid #d0d4da;border-radius:10px;font-size:15px;font-family:inherit;margin-top:4px;background:#fff}
+.two{display:grid;grid-template-columns:1fr 1fr;gap:8px}
+.btns{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-top:14px}
+.b{border:1px solid #d0d4da;background:#fff;border-radius:10px;padding:12px;font-size:14px;font-weight:600;cursor:pointer;color:#1f2328}
+.b.pri{background:#1a73e8;border-color:#1a73e8;color:#fff}
+.b.warn{background:#c5221f;border-color:#c5221f;color:#fff}
+.msg{font-size:13px;margin-top:10px}
+.msg.ok{color:#188038}.msg.err{color:#c5221f}
+.seg .demo{margin-left:auto;background:#fff4e5;color:#b45309;border:1px solid #f5c58a;font-size:13px}
+.loadbar{font-size:12px;color:#8a8f98;text-align:center;margin:-4px 0 8px}
+.pr{display:flex;align-items:center;justify-content:space-between;gap:8px;border-top:1px solid #eef0f2;padding:9px 0}
+.prl{display:flex;flex-direction:column;gap:2px;min-width:0}
+.prl .n{font-weight:700;font-size:14px}
+.prl .tm{font-size:11px;color:#8a8f98}
+.pact{display:flex;align-items:center;gap:6px;flex:0 0 auto}
+.pinv{font-family:ui-monospace,Menlo,monospace;font-size:15px;letter-spacing:2px;min-width:46px;text-align:right}
+.mini{border:1px solid #d0d4da;background:#fff;border-radius:8px;padding:5px 9px;font-size:12px;color:#3c4043;cursor:pointer}
+.mini.red{border-color:#c5221f;color:#c5221f}
+.center{text-align:center;padding:40px 10px;color:#555}
+.refresh{float:right;border:none;background:none;color:#1a73e8;font-size:13px;cursor:pointer;padding:2px}
+.prog{display:inline-block;font-size:11px;font-weight:700;border-radius:6px;padding:2px 7px;white-space:nowrap}
+.prog.g{color:#137333;background:#e6f4ea}.prog.y{color:#8a5300;background:#fef3e0}.prog.r{color:#a50e0e;background:#fce8e6}.prog.n{color:#5f6368;background:#f1f3f4}
+.clk{cursor:pointer}
+.clk .n{color:#1557b0;text-decoration:underline;text-underline-offset:3px}
+.prow{display:grid;grid-template-columns:1fr 64px 64px 34px;gap:6px;align-items:center;margin-top:6px}
+.prow input{margin-top:0}
+.x{border:none;background:#f1f2f4;border-radius:8px;height:40px;font-size:16px;color:#5f6368;cursor:pointer}
+.add{margin-top:8px;border:1px dashed #b8bcc2;background:#fff;border-radius:10px;padding:10px;width:100%;font-size:14px;color:#4b5058;cursor:pointer}
+.hist{border-top:1px solid #eef0f2;padding:12px 0}
+.hist:first-child{border-top:none}
+.hl{display:flex;justify-content:space-between;gap:8px;align-items:center;font-size:14px;font-weight:700}
+.back{border:none;background:none;color:#1a73e8;font-size:14px;padding:0 0 8px;cursor:pointer}
+.ansg{display:grid;grid-template-columns:repeat(5,1fr);gap:6px;margin-top:10px}
+.ag{background:#f6f8fa;border-radius:10px;padding:8px 2px;text-align:center;min-width:0}
+.ag.agok{background:#e6f4ea}.ag.agng{background:#fce8e6}
+.agv{overflow-x:auto;margin-top:2px}
+.agv .mx{font-size:16px}
+.agr{font-size:11px;color:#1557b0;margin-top:4px;font-weight:600}
+.panel2{background:#fafbfc;border-radius:10px;padding:10px;margin:0 0 8px}
+.okx{letter-spacing:1px;font-size:13px}
+.copyr{display:flex;flex-wrap:wrap;gap:6px;margin-top:8px}
+a.line{display:block;color:#1a73e8}
+
+.mx{display:inline-flex;align-items:center;font-size:20px;line-height:1.25;vertical-align:middle}
+.mp{display:inline-flex;align-items:center;white-space:pre}
+.fr{display:inline-flex;flex-direction:column;align-items:center;margin:0 2px}
+.fr>.mp:first-child{border-bottom:1.6px solid currentColor;padding:0 4px 1px}
+.fr>.mp:last-child{padding:1px 4px 0}
+.rad{display:inline-flex;align-items:stretch}
+.rsv{width:.62em;flex:0 0 auto;align-self:stretch;overflow:visible;margin-left:1px}
+.rd{display:inline-flex;align-items:center;border-top:1.6px solid currentColor;padding:2px 2px 0 1px}
+.mi{font-style:italic;font-family:Georgia,"Times New Roman",serif;padding:0 1px}
+.mph{color:#b0b4ba}
+.caret{display:inline-block;width:2px;height:1.05em;background:#1a73e8;margin:0 1px;animation:blink 1s steps(1) infinite}
+@keyframes blink{50%{opacity:0}}
+.af .arow{display:flex;align-items:center;flex-wrap:wrap;gap:10px;min-height:54px;padding:6px 12px;border:1px solid #d0d4da;border-radius:12px;margin-top:6px;background:#fff;cursor:pointer}
+.af .arow.on{border-color:#1a73e8;box-shadow:0 0 0 2px #d2e3fc}
+.af .arow.bad{border-color:#c5221f}
+.ano{font-weight:700;font-size:14px;color:#4b5058;min-width:30px}
+.aval{flex:1;min-width:0;overflow-x:auto}
+.aph{font-size:14px;color:#9aa0a6}
+.aerr{width:100%;font-size:12px;color:#c5221f;margin-top:-4px}
+.pad{display:grid;grid-template-columns:repeat(4,1fr);gap:6px;margin-top:12px}
+.pk{height:50px;border:1px solid #d0d4da;border-radius:10px;background:#f1f3f5;font-size:18px;color:#1f2328;cursor:pointer;padding:0;font-family:inherit}
+.pk.num{background:#fff;font-size:20px;font-weight:600}
+.pk.w{font-size:14px}
+.pk.fic.in{background:#e8f0fe;border-color:#1a73e8}
+.pk.nx{background:#1a73e8;border-color:#1a73e8;color:#fff;font-weight:700;font-size:15px}
+.pk:active{filter:brightness(.92)}
+.pk.fic{display:flex;align-items:center;justify-content:center;gap:6px}
+.fi{display:inline-flex;flex-direction:column;align-items:center;gap:2px}
+.fb{display:block;width:12px;height:12px;border:1.6px solid currentColor;border-radius:2px}
+.fb.on{background:#1a73e8;border-color:#1a73e8}
+.fl{display:block;width:18px;height:2px;background:currentColor}
+.fa{font-size:15px;color:#1a73e8;font-weight:700}
+.pad.chp{grid-template-columns:repeat(5,1fr)}
+.pad.chp2{grid-template-columns:repeat(2,1fr);margin-top:6px}
+.pk.ck{background:#fff;font-size:21px;font-weight:700}
+.pk.ck.on{background:#1a73e8;border-color:#1a73e8;color:#fff}
+.chv{font-weight:700;letter-spacing:.5px}
+.agv .chv{font-size:15px;white-space:nowrap;letter-spacing:0}
+.chn{font-size:12px;white-space:nowrap}
+.ksw{display:flex;align-items:center;gap:5px;flex-wrap:wrap;margin-top:12px;padding:8px 10px;background:#f8f9fb;border:1px solid #e3e6ea;border-radius:10px}
+.ksw .kl{font-size:13px;color:#4b5058;font-weight:700}
+.ksw .kb{min-width:38px;height:34px;padding:0 8px;border:1px solid #d0d4da;border-radius:8px;background:#fff;font-size:15px;font-family:inherit;cursor:pointer}
+.ksw .kb.on{background:#1a73e8;border-color:#1a73e8;color:#fff;font-weight:700}
+
+</style></head>
+<body><div class="wrap" id="app"><div class="center">불러오는 중…</div></div>
+<script>
+window.SHELL = true;
+var SHELL_EXEC = "https://script.google.com/macros/s/AKfycbxjb1lhGBwB_EK6MaEa2hzrxqkjD56IYyRwzgLrKzq2Qv6nVJBbD0pZ1dUdG6jf0qjj/exec", SHELL_VER = "v7_1127", SHELL_T0 = Date.now();
+// 새 버전 확인: 구글 응답의 버전(v)이 이 화면 버전과 다르면 → 새 화면을 받아 저장하고 바로 새로 고침
+// (열자마자면 바로, 쓰는 중이면 입력이 날아가지 않게 위에 '새로 고침' 띠만 띄움)
+function SHELL_UPDATE(v) {
+  if (window.__updBusy || !v || v === SHELL_VER || Date.now() - (window.__updLast || 0) < 60000) return;
+  window.__updBusy = true; window.__updLast = Date.now();
+  var path = location.pathname;
+  fetch(path + '?nosw=1&t=' + Date.now(), { cache: 'no-store' }).then(function (r) { return r.ok ? r.text() : ''; }).then(function (html) {
+    if (html.indexOf(JSON.stringify(v)) < 0) { window.__updBusy = false; return; }   // GitHub에 아직 안 올라감 → 1분 뒤 응답 때 다시
+    var put = window.caches ? caches.keys().then(function (ks) {
+      return Promise.all(ks.filter(function (k) { return k.indexOf('h5-') === 0; }).map(function (k) {
+        return caches.open(k).then(function (c) { return c.put(location.origin + path, new Response(html, { headers: { 'Content-Type': 'text/html; charset=utf-8' } })); });
+      }));
+    }) : Promise.resolve();
+    put.catch(function () {}).then(function () {
+      if (Date.now() - SHELL_T0 < 6000) { location.reload(); return; }
+      var b = document.createElement('div');
+      b.textContent = '앱이 업데이트됐어요 · 눌러서 새로 고침';
+      b.style.cssText = 'position:fixed;left:0;right:0;top:0;z-index:99;background:#1a4fd0;color:#fff;text-align:center;padding:12px;font-size:15px;font-weight:700;cursor:pointer';
+      b.onclick = function () { location.reload(); };
+      document.body.appendChild(b);
+    });
+  }).catch(function () { window.__updBusy = false; });
+}
+function SHELL_Q(k) { try { return new URLSearchParams(location.search).get(k) || ''; } catch (e) { return ''; } }
+(function () {
+  function call(fn, args, ok, fail) {
+    fetch(SHELL_EXEC, { method: 'POST', headers: { 'Content-Type': 'text/plain;charset=utf-8' }, body: JSON.stringify({ fn: fn, args: args }) })
+      .then(function (r) { return r.json(); })
+      .then(function (j) { if (j && j.v && j.v !== SHELL_VER) SHELL_UPDATE(j.v); if (j && j.err) { if (fail) fail(new Error(j.err)); } else { if (window.SHELL_SAW) window.SHELL_SAW(fn, args, j ? j.out : null); if (ok) ok(j ? j.out : null); } })
+      .catch(function (e) { if (fail) fail(e); });
+  }
+  function mk(s, f) {
+    return new Proxy({}, { get: function (_, k) {
+      if (k === 'withSuccessHandler') return function (fn) { return mk(fn, f); };
+      if (k === 'withFailureHandler') return function (fn) { return mk(s, fn); };
+      return function () { call(k, [].slice.call(arguments), s, f); };
+    } });
+  }
+  window.google = { script: { run: mk(null, null) } };
+})();
+function SHELL_RUN() {
+  var s = document.createElement('script');
+  s.textContent = document.getElementById('appjs').textContent;
+  document.body.appendChild(s);
+}
+function SHELL_WHEN_READY(fn) { if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', fn); else fn(); }
+var SHELL_KEY = ''; try { SHELL_KEY = localStorage.getItem('h5_tkey') || ''; } catch (e) {}
+window.__TBOOT = {}; try { window.__TBOOT = JSON.parse(localStorage.getItem('h5tboot') || '{}') || {}; } catch (e) {}
+SHELL_WHEN_READY(function () {
+  if (!SHELL_KEY) { document.getElementById('app').innerHTML = '<div class="center">교사용 키가 없어요. 선생님 앱 설치 링크로 다시 열어 주세요.</div>'; return; }
+  SHELL_RUN();
+});
+</script><script type="text/x-app" id="appjs">
+var KEY = SHELL_KEY;
+var TBOOT = window.__TBOOT;
+var INAPP = true;   // 설치 앱(선생님 앱) 안에서 열렸는지   // 페이지와 함께 받은 모든 반 데이터 (v6: 반을 바꿀 때 바로 넘어감)
+function mathParse(text) {
+  var s = String(text == null ? '' : text).replace(/\s+/g, '');
+  var flat = [], grp = null;
+  for (var i = 0; i < s.length; i++) {
+    var ch = s.charAt(i), tok = null;
+    if ((ch >= '0' && ch <= '9') || ch === '.') tok = ch;
+    else if (ch === '+') tok = '+';
+    else if (ch === '-' || ch === '−') tok = '-';
+    else if (ch === '√') tok = 'r';
+    else if (ch === 'i') tok = 'i';
+    else if (ch === 'π') tok = 'p';
+    else if (ch === '/') { if (grp) return null; tok = '/'; }
+    else if (ch === '(') { if (grp) return null; grp = []; continue; }
+    else if (ch === ')') { if (!grp) return null; flat.push({ g: grp }); grp = null; continue; }
+    else return null;
+    (grp || flat).push(tok);
+  }
+  if (grp) return null;
+  var items = [];
+  for (var j = 0; j < flat.length; j++) {
+    var x = flat[j];
+    if (x !== '/') { items.push(x); continue; }
+    var num = [], den = [], nx = flat[j + 1];
+    if (items.length && items[items.length - 1].g) num = items.pop().g;
+    else while (items.length && typeof items[items.length - 1] === 'string' && items[items.length - 1] !== '+' && items[items.length - 1] !== '-') num.unshift(items.pop());
+    if (nx && nx.g) { den = nx.g; j++; }
+    else {
+      if (nx === 'r') { den.push('r'); j++; }
+      while (j + 1 < flat.length && mathIsNum(flat[j + 1])) den.push(flat[++j]);
+    }
+    items.push({ f: 1, num: num, den: den });
+  }
+  var out = [];
+  items.forEach(function (x) { if (x.g) out = out.concat(x.g); else out.push(x); });
+  return { items: out, foc: null };
+}
+
+function mathIsNum(c) { return typeof c === 'string' && ((c >= '0' && c <= '9') || c === '.'); }
+
+function mathPartText(t) {
+  return t.map(function (k) { return k === 'r' ? '√' : k === 'p' ? 'π' : k; }).join('');
+}
+
+function mathText(a) {
+  if (!a) return '';
+  var it = a.items;
+  return it.map(function (x, k) {
+    if (!x.f) return x === 'r' ? '√' : x === 'p' ? 'π' : x;
+    var n = mathPartText(x.num), d = mathPartText(x.den), prev = it[k - 1], next = it[k + 1];
+    if (/.[+-]/.test(n) || n.charAt(0) === '-' || (prev && prev !== '+' && prev !== '-')) n = '(' + n + ')';
+    if (!/^[0-9.]+$/.test(d) || mathIsNum(next) || next === 'r' || (next && next.f)) d = '(' + d + ')';
+    return n + '/' + d;
+  }).join('');
+}
+
+function mathSeq(t, allowFrac) {
+  if (!t.length) return { err: '비어 있어요' };
+  var re = 0, im = 0, i = 0, n = t.length;
+  while (i < n) {
+    var sign = 1;
+    if (t[i] === '+' || t[i] === '-') { if (t[i] === '-') sign = -1; i++; }
+    var cr = sign, ci = 0, any = false;
+    while (i < n && t[i] !== '+' && t[i] !== '-') {
+      var f, s = '', x = t[i];
+      if (typeof x === 'object') {
+        if (!allowFrac) return { err: '분수 안에 분수는 넣을 수 없어요' };
+        var nv = mathSeq(x.num, false), dv = mathSeq(x.den, false);
+        if (nv.err) return { err: '분자: ' + nv.err };
+        if (dv.err) return { err: '분모: ' + dv.err };
+        var q = dv.re * dv.re + dv.im * dv.im;
+        if (q < 1e-24) return { err: '분모가 0이에요' };
+        f = [(nv.re * dv.re + nv.im * dv.im) / q, (nv.im * dv.re - nv.re * dv.im) / q];
+        i++;
+      }
+      else if (mathIsNum(x)) {
+        while (i < n && mathIsNum(t[i])) s += t[i++];
+        if (s === '.' || isNaN(Number(s))) return { err: '소수점 자리를 확인해 주세요' };
+        f = [Number(s), 0];
+      }
+      else if (x === 'r') {
+        i++;
+        while (i < n && mathIsNum(t[i])) s += t[i++];
+        if (!s) return { err: '√ 안에 숫자를 넣어 주세요' };
+        if (s === '.' || isNaN(Number(s))) return { err: '소수점 자리를 확인해 주세요' };
+        f = [Math.sqrt(Number(s)), 0];
+      }
+      else if (x === 'i') { i++; f = [0, 1]; }
+      else if (x === 'p') { i++; f = [Math.PI, 0]; }
+      else return { err: '알 수 없는 기호가 있어요' };
+      var nr = cr * f[0] - ci * f[1], ni = cr * f[1] + ci * f[0];
+      cr = nr; ci = ni; any = true;
+    }
+    if (!any) return { err: '+, − 뒤에 숫자를 넣어 주세요' };
+    re += cr; im += ci;
+  }
+  return { re: re, im: im };
+}
+
+function mathValue(a) {
+  if (!a || !a.items.length) return { err: '답이 비어 있어요' };
+  return mathSeq(a.items, true);
+}
+
+function mathClose(x, y) {
+  var dx = x.re - y.re, dy = x.im - y.im;
+  var m = Math.max(1, Math.sqrt(x.re * x.re + x.im * x.im), Math.sqrt(y.re * y.re + y.im * y.im));
+  return Math.sqrt(dx * dx + dy * dy) <= 1e-9 * m;
+}
+
+function chLetters() { return 'ㄱㄴㄷㄹㅁㅂㅅㅇㅈ'; }
+
+function chParse(text) {
+  var s = String(text == null ? '' : text).replace(/\s+/g, ''), L = chLetters(), n = 0;
+  if (!/[ㄱ-ㅎ]/.test(s)) return null;
+  var m = s.match(/\[ㄱ~([ㄱ-ㅎ])\]$/);
+  if (m) { n = L.indexOf(m[1]) + 1; s = s.slice(0, m.index); }
+  var sel = [];
+  for (var i = 0; i < s.length; i++) {
+    var ch = s.charAt(i);
+    if (ch === ',') continue;
+    var k = L.indexOf(ch);
+    if (k < 0) return null;
+    if (sel.indexOf(k) < 0) sel.push(k);
+  }
+  sel.sort(function (a, b) { return a - b; });
+  if (!n) n = Math.max(3, sel.length ? sel[sel.length - 1] + 1 : 3);
+  return { ch: 1, n: Math.min(n, L.length), sel: sel.filter(function (k) { return k < n; }) };
+}
+
+function chText(c, withN) {
+  var L = chLetters();
+  var t = c.sel.slice().sort(function (a, b) { return a - b; }).map(function (k) { return L.charAt(k); }).join(',');
+  return withN ? t + ' [ㄱ~' + L.charAt(c.n - 1) + ']' : t;
+}
+
+function chKey(c) { return chText(c, false); }
+
+function uiMath(a, caret) {
+  function part(t, active, lead, ph) {
+    var sp = h('span', { 'class': 'mp' }), i = 0, placed = false;
+    while (i < t.length) {
+      var k = t[i];
+      if (k === 'r') {
+        i++;
+        var s = '';
+        while (i < t.length && mathIsNum(t[i])) s += t[i++];
+        var rd = h('span', { 'class': 'rd' });
+        if (s) rd.appendChild(document.createTextNode(s));
+        if (active && i === t.length) { rd.appendChild(h('span', { 'class': 'caret' })); placed = true; }
+        else if (!s) rd.appendChild(h('span', { 'class': 'mph', text: '□' }));
+        var NS = 'http://www.w3.org/2000/svg', sv = document.createElementNS(NS, 'svg'), pa = document.createElementNS(NS, 'path');
+        sv.setAttribute('viewBox', '0 0 100 100'); sv.setAttribute('preserveAspectRatio', 'none'); sv.setAttribute('class', 'rsv');
+        pa.setAttribute('d', 'M2 60 L22 50 L46 96 L74 3 L100 3'); pa.setAttribute('fill', 'none'); pa.setAttribute('stroke', 'currentColor');
+        pa.setAttribute('stroke-width', '1.6'); pa.setAttribute('stroke-linejoin', 'round'); pa.setAttribute('vector-effect', 'non-scaling-stroke');
+        sv.appendChild(pa);
+        sp.appendChild(h('span', { 'class': 'rad' }, [sv, rd]));   // 근호 기호와 윗줄이 이어지게 그림
+        continue;
+      }
+      var txt = k === 'p' ? 'π' : k === '-' ? (i === 0 && lead ? '−' : ' − ') : k === '+' ? ' + ' : k;
+      sp.appendChild(h('span', { 'class': k === 'i' ? 'mi' : 'mt', text: txt }));
+      i++;
+    }
+    if (active && !placed) sp.appendChild(h('span', { 'class': 'caret' }));
+    if (!t.length && ph) sp.appendChild(h('span', { 'class': 'mph', text: '□' }));
+    return sp;
+  }
+  if (!a) return h('span', { 'class': 'mx', text: '?' });
+  if (a.ch) {   // ㄱㄴㄷ 답: 고른 글자를 쉼표로
+    var L = chLetters(), t = a.sel.map(function (k) { return L.charAt(k); }).join(', ');
+    return h('span', { 'class': 'mx chv' }, [t ? document.createTextNode(t) : h('span', { 'class': 'mph', text: '□' }), caret ? h('span', { 'class': 'caret' }) : null]);
+  }
+  var row = h('span', { 'class': 'mx' }), seg = [], start = true, top = !!(caret && !a.foc);
+  function flush(last) {
+    if (seg.length || (last && top)) row.appendChild(part(seg, !!(last && top), start, false));
+    if (seg.length) start = false;
+    seg = [];
+  }
+  a.items.forEach(function (x, k) {
+    if (!x.f) { seg.push(x); return; }
+    flush(false);
+    var on = function (p) { return !!(caret && a.foc && a.foc.i === k && a.foc.p === p); };
+    row.appendChild(h('span', { 'class': 'fr' }, [part(x.num, on('num'), true, true), part(x.den, on('den'), true, true)]));
+    start = false;
+  });
+  flush(true);
+  if (!a.items.length && !caret) row.appendChild(h('span', { 'class': 'mph', text: '□' }));
+  return row;
+}
+
+function uiAns(text) { return chParse(text) || mathParse(text) || { items: [], foc: null }; }
+
+function uiAnsText(a) { return uiIsEmpty(a) ? '' : a.ch ? chText(a, false) : mathText(a); }
+
+function uiKeyText(a) { return a && a.ch ? chText(a, true) : uiAnsText(a); }
+
+function uiIsEmpty(a) { return !a || (a.ch ? !a.sel.length : !a.items.length); }
+
+function uiAnsErr(a) { if (uiIsEmpty(a) || a.ch) return ''; var v = mathValue(a); return v.err || ''; }
+
+function uiBlank(n) { return n ? { ch: 1, n: n, sel: [] } : { items: [], foc: null }; }
+
+function uiPadPress(a, k) {
+  var fr = a.foc ? a.items[a.foc.i] : null;
+  var t = fr ? fr[a.foc.p] : a.items, last = t[t.length - 1];
+  var tok = { '−': '-', '√': 'r', 'π': 'p' }[k] || k;
+  var room = t.length < 24;
+  if (k.length === 1 && ((k >= '0' && k <= '9') || k === '.')) { if (room) t.push(k); }
+  else if (tok === '+' || tok === '-') {
+    if (last === '+' || last === '-') t[t.length - 1] = tok;
+    else if ((tok === '-' || t.length) && room) t.push(tok);
+  }
+  else if (tok === 'r') { if (last !== 'r' && room) t.push('r'); }
+  else if (tok === 'i' || tok === 'p') { if (room) t.push(tok); }
+  else if (k === '분수') {
+    if (!fr) { if (room) { a.items.push({ f: 1, num: [], den: [] }); a.foc = { i: a.items.length - 1, p: 'den' }; } }
+    else if (a.foc.p === 'den') a.foc.p = 'num';
+    else a.foc = null;
+  }
+  else if (k === '⌫') {
+    if (fr) {
+      if (t.length) t.pop();
+      else {
+        var o = a.foc.p === 'num' ? 'den' : 'num';
+        if (fr[o].length) a.foc.p = o; else { a.items.splice(a.foc.i, 1); a.foc = null; }
+      }
+    }
+    else if (last && last.f) {
+      if (!last.num.length && !last.den.length) a.items.pop();
+      else a.foc = { i: a.items.length - 1, p: last.num.length ? 'num' : 'den' };
+    }
+    else if (t.length) t.pop();
+  }
+  else if (k === '전체 지움') { a.items = []; a.foc = null; }
+}
+
+function uiPad(a, onChange) {
+  if (a.ch) {   // ㄱㄴㄷ 입력판: 보기 개수만큼, 한 줄에 5개. 누르면 선택 / 다시 누르면 취소
+    var L = chLetters(), g = h('div', { 'class': 'pad chp' });
+    for (var k = 0; k < a.n; k++) (function (k) {
+      var on = a.sel.indexOf(k) >= 0;
+      g.appendChild(h('button', { 'class': 'pk ck' + (on ? ' on' : ''), type: 'button', title: L.charAt(k), text: L.charAt(k), onclick: function () {
+        var i = a.sel.indexOf(k);
+        if (i >= 0) a.sel.splice(i, 1); else { a.sel.push(k); a.sel.sort(function (x, y) { return x - y; }); }
+        onChange('key');
+      } }));
+    })(k);
+    var low = h('div', { 'class': 'pad chp2' }, [
+      h('button', { 'class': 'pk w', type: 'button', title: '전체 지움', text: '전체 지움', onclick: function () { a.sel = []; onChange('key'); } }),
+      h('button', { 'class': 'pk w nx', type: 'button', title: '다음', text: '다음 ▶', onclick: function () { onChange('next'); } })
+    ]);
+    return h('div', null, [g, low]);
+  }
+  var fr = a.foc ? a.items[a.foc.i] : null;
+  var rows = [['7', '8', '9', '⌫'], ['4', '5', '6', '√'], ['1', '2', '3', '분수'], ['−', '0', '.', '+'], ['i', 'π', '전체 지움', '다음']];
+  var where = fr ? a.foc.p : '';   // 분수 버튼 그림: 지금 입력 중인 칸을 칠함 (분모 → 분자 → 밖)
+  var grid = h('div', { 'class': 'pad' });
+  rows.forEach(function (r) {
+    r.forEach(function (k) {
+      var num = k.length === 1 && ((k >= '0' && k <= '9') || k === '.');
+      var frk = k === '분수';
+      var cls = frk ? 'pk fic' + (where ? ' in' : '') : 'pk' + (num ? ' num' : '') + (k.length > 2 ? ' w' : '') + (k === '다음' ? ' nx' : '');
+      var b = h('button', { 'class': cls, type: 'button', title: k, onclick: function () {
+        if (k !== '다음') uiPadPress(a, k);
+        onChange(k === '다음' ? 'next' : 'key');
+      } });
+      if (frk) {   // 분수 기호: 빈칸/빈칸. 분수 안에서는 지금 입력 중인 칸(분모·분자)을 칠함
+        b.appendChild(h('span', { 'class': 'fi' }, [h('span', { 'class': 'fb' + (where === 'num' ? ' on' : '') }), h('span', { 'class': 'fl' }), h('span', { 'class': 'fb' + (where === 'den' ? ' on' : '') })]));
+      } else b.appendChild(document.createTextNode(k === '다음' ? '다음 ▶' : k));
+      grid.appendChild(b);
+    });
+  });
+  return grid;
+}
+
+function uiAnsForm(F, rerender, kindSwitch) {
+  var box = h('div', { 'class': 'af' });
+  F.vals.forEach(function (a, k) {
+    var on = F.cur === k, err = on ? '' : uiAnsErr(a);
+    box.appendChild(h('div', { 'class': 'arow' + (on ? ' on' : '') + (err ? ' bad' : ''), onclick: function () { F.cur = k; rerender(); } }, [
+      h('span', { 'class': 'ano', text: (k + 1) + '번' }),
+      h('span', { 'class': 'aval' }, [uiIsEmpty(a) && !on ? h('span', { 'class': 'aph', text: '눌러서 입력' }) : uiMath(a, on)]),
+      err ? h('span', { 'class': 'aerr', text: err }) : null
+    ]));
+  });
+  if (kindSwitch) {   // 정답 등록: 문항 유형 [숫자 | ㄱㄴㄷ] + 보기 개수
+    var cur = F.vals[F.cur], L = chLetters();
+    var sw = h('div', { 'class': 'ksw' }, [
+      h('span', { 'class': 'kl', text: (F.cur + 1) + '번' }),
+      h('button', { 'class': 'kb' + (cur.ch ? '' : ' on'), type: 'button', text: '숫자', onclick: function () { if (cur.ch) { F.vals[F.cur] = uiBlank(0); rerender(); } } }),
+      h('button', { 'class': 'kb' + (cur.ch ? ' on' : ''), type: 'button', text: 'ㄱㄴㄷ', onclick: function () { if (!cur.ch) { F.vals[F.cur] = uiBlank(3); rerender(); } } })
+    ]);
+    if (cur.ch) {
+      sw.appendChild(h('span', { 'class': 'kl', style: 'margin-left:auto', text: '보기' }));
+      sw.appendChild(h('button', { 'class': 'kb', type: 'button', text: '−', onclick: function () { if (cur.n > 2) { cur.n--; cur.sel = cur.sel.filter(function (k) { return k < cur.n; }); rerender(); } } }));
+      sw.appendChild(h('span', { 'class': 'kl', text: cur.n + '개' }));
+      sw.appendChild(h('button', { 'class': 'kb', type: 'button', text: '+', onclick: function () { if (cur.n < L.length) { cur.n++; rerender(); } } }));
+    }
+    box.appendChild(sw);
+  }
+  box.appendChild(uiPad(F.vals[F.cur], function (cmd) { if (cmd === 'next') F.cur = (F.cur + 1) % F.vals.length; rerender(); }));
+  return box;
+}
+var T = { code: null, roundId: null, d: null, tab: 'q', confirmNew: false, msg: '', msgCls: '', form: null, hist: null, mode: 'new', cache: TBOOT || {} };
+
+function h(tag, attrs, kids) {
+  var e = document.createElement(tag);
+  if (attrs) for (var k in attrs) {
+    if (k === 'text') e.textContent = attrs[k];
+    else if (k.indexOf('on') === 0) e[k] = attrs[k];
+    else e.setAttribute(k, attrs[k]);
+  }
+  (kids || []).forEach(function (c) { if (c) e.appendChild(typeof c === 'string' ? document.createTextNode(c) : c); });
+  return e;
+}
+function lsGet(k) { try { return window.localStorage.getItem(k); } catch (e) { return null; } }
+function lsSet(k, v) { try { window.localStorage.setItem(k, v); } catch (e) {} }
+function app() { return document.getElementById('app'); }
+function center(t) { var a = app(); a.innerHTML = ''; a.appendChild(h('div', { 'class': 'center', text: t })); }
+function progBadge(p) {
+  if (!p) return null;
+  var c = p === T.d.progress[0] ? 'g' : (p === T.d.progress[1] ? 'y' : 'r');
+  return h('span', { 'class': 'prog ' + c, text: p });
+}
+
+function load(keepMsg) {
+  if (!keepMsg) T.msg = '';
+  var want = T.code || lsGet('t_code') || '';
+  var hit = T.cache[want], rid = T.roundId || '';   // 받아 둔 데이터가 있으면 먼저 바로 보여 주고, 뒤에서 최신으로 바꿈
+  if (hit && hit.ok && !rid) { show(hit); }
+  else if (!T.d) center('불러오는 중…');
+  else { T.loading = true; render(); }
+  google.script.run.withSuccessHandler(function (d) {
+    T.loading = false;
+    if (!d || !d.ok) { if (!T.d) center(d ? d.message : '오류가 발생했어요.'); return; }
+    if (!rid || (d.round && d.round.id === rid)) {
+      T.cache[d.cls.code] = d;
+      if (window.SHELL) { try { localStorage.setItem('h5tboot', JSON.stringify(T.cache)); } catch (e) {} }   // 설치 앱: 다음에 켤 때 바로 보여 줌
+    }
+    if (T.code && d.cls.code !== T.code) return;   // 그사이 다른 반을 눌렀으면 무시
+    if (!rid && hit && T.roundId !== shown) return;   // 그사이 다른 회차를 눌렀으면 화면은 그대로
+    show(d);
+  }).withFailureHandler(function (e) { T.loading = false; if (!T.d) center('연결 오류: ' + (e && e.message ? e.message : '')); else render(); })
+    .apiTeacher(KEY, want, rid);
+  var shown = T.roundId;
+  function show(d) {
+    T.d = d; T.code = d.cls.code; T.roundId = d.round ? d.round.id : null;
+    lsSet('t_code', T.code);
+    render();
+    if (T.tab === 'h5' && !TH.d) h5Load();
+    prefetch();
+  }
+}
+/** 아직 안 받은 반은 뒤에서 미리 받아 둠 */
+function prefetch() {
+  if (!T.d) return;
+  T.d.classes.forEach(function (c) {
+    if (T.cache[c.code] || T.pf === c.code) return;
+    T.pf = c.code;
+    google.script.run.withSuccessHandler(function (d) { if (d && d.ok) { T.cache[d.cls.code] = d; if (window.SHELL) { try { localStorage.setItem('h5tboot', JSON.stringify(T.cache)); } catch (e) {} } } T.pf = null; prefetch(); })
+      .withFailureHandler(function () { T.pf = null; }).apiTeacher(KEY, c.code, '');
+  });
+}
+
+function openHistory(name) {
+  T.hist = { name: name, loading: true }; render();
+  google.script.run.withSuccessHandler(function (r) {
+    if (!r || !r.ok) { T.hist = null; T.msg = r ? r.message : ''; render(); return; }
+    T.hist = { name: r.name, history: r.history }; render(); window.scrollTo(0, 0);
+  }).withFailureHandler(function () { T.hist = null; render(); }).apiTeacherStudent(KEY, T.d.cls.code, name);
+}
+
+/** 선생님 체험: 지금 반의 학생 화면을 체험 모드로 열기. 설치 앱 안이면 앱이 화면을 바꿔 주고, 아니면 새 탭 */
+function openDemo() {
+  if (window.SHELL) { try { window.top.postMessage({ h5demo: T.d.cls.code }, '*'); } catch (e) {} return; }   // 설치 앱(v7): 앱 안에서 학생 화면 체험
+  var u = T.d.demoUrl;
+  if (!u) { T.msg = "'설정' 시트에 웹앱 주소가 없어 체험 화면을 열 수 없어요."; T.msgCls = 'red'; render(); return; }
+  if (INAPP) { try { window.top.postMessage({ h5open: u + '&app=1' }, '*'); return; } catch (e) {} }
+  window.open(u, '_blank');
+}
+
+function render() {
+  var d = T.d, a = app(); a.innerHTML = '';
+
+  var seg = h('div', { 'class': 'seg' });
+  d.classes.forEach(function (c) {
+    seg.appendChild(h('button', { 'class': c.code === (T.code || d.cls.code) ? 'on' : '', text: c.name,
+      onclick: function () { if (c.code === d.cls.code) return; T.code = c.code; T.roundId = null; T.confirmNew = false; T.form = null; T.hist = null; T.mode = 'new'; h5Reset(); load(); } }));
+  });
+  seg.appendChild(h('button', { 'class': 'demo', text: '👀 학생 화면', title: '학생 화면 체험 (기록에 포함되지 않음)', onclick: openDemo }));
+  a.appendChild(seg);
+  if (T.loading) a.appendChild(h('div', { 'class': 'loadbar', text: '불러오는 중…' }));
+
+  var tabs = h('div', { 'class': 'tabs' });
+  [['q', '질문'], ['s', '학생'], ['st', '통계'], ['set', '회차·링크'], ['h5', d.h5Name || 'H5']].forEach(function (t) {
+    tabs.appendChild(h('button', { 'class': T.tab === t[0] && !T.hist ? 'on' : '', text: t[1], onclick: function () {
+      T.tab = t[0]; T.hist = null; T.confirmNew = false; T.msg = ''; T.justStarted = false; T.mode = 'new'; T.form = null;
+      if (t[0] === 'h5') { TH.mode = 'view'; TH.form = null; TH.open = null; TH.confirm = ''; TH.msg = ''; h5Load(); }
+      render();
+    } }));
+  });
+  a.appendChild(tabs);
+
+  if (T.hist) a.appendChild(historyCard());
+  else if (T.tab === 'h5') a.appendChild(h5Tab());
+  else if (T.tab === 'set') a.appendChild(setTab());
+  else if (T.tab === 'st') a.appendChild(statsTab());
+  else if (!d.round) a.appendChild(h('div', { 'class': 'card center', text: "등록된 회차가 없어요. '회차·링크' 탭에서 새 회차를 시작하세요." }));
+  else {
+    a.appendChild(roundCard());
+    a.appendChild(T.tab === 'q' ? questionCard() : studentCard());
+    if (T.tab === 's') a.appendChild(pinCard());
+  }
+  a.appendChild(h('div', { style: 'text-align:center;font-size:12px;color:#9aa0a6;margin-top:16px', text: '버전 ' + (d.version || '-') }));
+}
+
+function roundCard() {
+  var d = T.d, r = d.round, g = d.agg;
+  var sel = h('select', { onchange: function () { T.roundId = sel.value; load(); } });
+  d.rounds.forEach(function (x) {
+    var o = h('option', { value: x.id, text: (x.current ? '[진행 중] ' : '') + x.label });
+    if (x.id === r.id) o.selected = true;
+    sel.appendChild(o);
+  });
+  var kids = [
+    h('button', { 'class': 'refresh', text: '새로고침', onclick: function () { load(); } }),
+    h('div', { 'class': 'sub', text: d.cls.name + (r.current ? ' · 진행 중 회차' : ' · 지난 회차') + ' · ' + r.start + ' 시작' })
+  ];
+  r.parts.forEach(function (p) { kids.push(h('div', { 'class': 'big', text: p.label + ' (' + p.from + '~' + p.to + '번)' })); });
+  if (r.due) kids.push(h('div', { 'class': 'due' + (r.overdue && r.current ? ' old' : ''), text: r.due + ' 수업까지' + (r.overdue && r.current ? ' · 기한 지남' : '') }));
+  kids.push(sel);
+  kids.push(h('div', { 'class': 'metrics' }, [
+    h('div', { 'class': 'm' }, [h('b', { text: g.submitted + '/' + g.total }), h('span', { text: '제출' })]),
+    h('div', { 'class': 'm' }, [h('b', { text: String(g.progressCount[0].names.length) }), h('span', { text: '숙제 다 함' })]),
+    h('div', { 'class': 'm' }, [h('b', { text: String(g.problems.length) }), h('span', { text: '질문 문항 수' })])
+  ]));
+  kids.push(h('div', { 'class': 'line' }, [h('span', { 'class': g.missing.length ? 'red' : 'green', text: '미제출: ' + (g.missing.length ? g.missing.join(', ') : '없음') })]));
+  g.progressCount.slice(1).forEach(function (pc, i) {
+    if (pc.names.length) kids.push(h('div', { 'class': 'line ' + (i === 0 ? 'amber' : 'red'), text: pc.label + ': ' + pc.names.join(', ') }));
+  });
+  return h('div', { 'class': 'card' }, kids);
+}
+
+function questionCard() {
+  var g = T.d.agg, c = h('div', { 'class': 'card' });
+  if (!g.problems.length) { c.appendChild(h('div', { 'class': 'center', text: '아직 질문이 없어요.' })); return c; }
+  var list = h('div');
+  g.problems.forEach(function (p) {
+    var box = h('div', { 'class': 'p' }, [h('div', { 'class': 'ph' }, [
+      h('span', { 'class': 'qn', text: p.name }),
+      h('span', { 'class': 'cnt', text: p.count + '명' })
+    ])]);
+    box.appendChild(h('div', { 'class': 'names', text: p.names.join(', ') }));
+    if (p.tags.length) {
+      var tg = h('div');
+      p.tags.forEach(function (t) { tg.appendChild(h('span', { 'class': 'tg', text: t.tag + ' ' + t.n })); });
+      box.appendChild(tg);
+    }
+    p.notes.forEach(function (n) {
+      var txt = [n.tag, n.memo].filter(function (x) { return x; }).join(' — ');
+      box.appendChild(h('div', { 'class': 'note' }, [h('b', { text: n.name }), ' ' + txt]));
+    });
+    list.appendChild(box);
+  });
+  c.appendChild(list);
+  return c;
+}
+
+function studentCard() {
+  var c = h('div', { 'class': 'card' }, [h('div', { 'class': 'sub', style: 'margin-bottom:4px', text: '이름을 누르면 회차별 기록을 볼 수 있어요. 시각은 마지막 제출 시각이에요.' })]);
+  T.d.agg.students.forEach(function (s) {
+    var v, cls = '';
+    if (!s.submitted) { v = '미제출'; cls = 'red'; }
+    else if (!s.nums.length) { v = '질문 없음'; cls = 'muted'; }
+    else v = s.nums.length + '개 · ' + s.nums.join(', ');
+    c.appendChild(h('div', { 'class': 'sr clk', onclick: function () { openHistory(s.name); } }, [
+      h('span', { 'class': 'n', text: s.name + (s.extra ? '*' : '') }),
+      h('span', { 'class': 'v' }, [progBadge(s.progress), h('span', { 'class': cls, style: s.progress ? 'margin-left:6px' : '', text: v })]),
+      s.time ? h('span', { 'class': 'tm', text: s.time }) : null
+    ]));
+  });
+  return c;
+}
+
+/* ── 학생 비밀번호 ── */
+var TP = { code: null, list: null, show: {}, confirm: '', msg: '', msgCls: '', busy: false };
+function pinLoad() {
+  TP.code = T.d.cls.code;
+  google.script.run.withSuccessHandler(function (r) {
+    if (r && r.ok && TP.code === T.d.cls.code) { TP.list = r.list; render(); }
+  }).apiTeacherPins(KEY, TP.code);
+}
+function pinCard() {
+  if (TP.code !== T.d.cls.code) { TP.list = null; TP.show = {}; TP.confirm = ''; TP.msg = ''; pinLoad(); }
+  var c = h('div', { 'class': 'card' }, [h('div', { 'class': 'big', text: '학생 비밀번호' })]);
+  if (!TP.list) { c.appendChild(h('div', { 'class': 'center', text: '불러오는 중…' })); return c; }
+  var done = TP.list.filter(function (x) { return x.has; }).length;
+  c.appendChild(h('div', { 'class': 'sub', style: 'margin-bottom:4px', text: '만든 학생 ' + done + '/' + TP.list.length + '명 · 까먹은 학생은 [보기]로 확인해서 알려 주세요. 초기화하면 학생이 다음에 들어올 때 새로 만들어요.' }));
+  if (TP.msg) c.appendChild(h('div', { 'class': 'msg ' + TP.msgCls, text: TP.msg }));
+  TP.list.forEach(function (x) {
+    var right;
+    if (TP.confirm === x.name) {
+      right = h('span', { 'class': 'pact' }, [
+        h('span', { 'class': 'red', style: 'font-size:13px', text: '초기화할까요?' }),
+        h('button', { 'class': 'mini red', text: '초기화', onclick: function () { pinReset(x.name); } }),
+        h('button', { 'class': 'mini', text: '취소', onclick: function () { TP.confirm = ''; render(); } })
+      ]);
+    } else if (!x.has) {
+      right = h('span', { 'class': 'pact' }, [h('span', { 'class': 'red', style: 'font-size:13px', text: '아직 안 만듦' })]);
+    } else {
+      right = h('span', { 'class': 'pact' }, [
+        h('span', { 'class': 'pinv', text: TP.show[x.name] ? x.pin : '●●●●' }),
+        h('button', { 'class': 'mini', text: TP.show[x.name] ? '가리기' : '보기', onclick: function () { TP.show[x.name] = !TP.show[x.name]; render(); } }),
+        h('button', { 'class': 'mini', text: '초기화', onclick: function () { TP.confirm = x.name; TP.msg = ''; render(); } })
+      ]);
+    }
+    var info = x.has ? '만듦 ' + x.set + (x.last ? ' · 로그인 ' + x.last : '') + (x.locked ? ' · 잠김(' + x.locked + '분)' : (x.fails ? ' · 틀림 ' + x.fails + '회' : '')) : '';
+    c.appendChild(h('div', { 'class': 'pr' }, [
+      h('div', { 'class': 'prl' }, [h('span', { 'class': 'n', text: x.name }), info ? h('span', { 'class': 'tm', text: info }) : null]),
+      right
+    ]));
+  });
+  return c;
+}
+function pinReset(name) {
+  if (TP.busy) return;
+  TP.busy = true;
+  google.script.run.withSuccessHandler(function (r) {
+    TP.busy = false; TP.confirm = '';
+    if (r && r.ok) { TP.msg = name + ' 비밀번호를 초기화했어요.'; TP.msgCls = 'ok'; TP.show[name] = false; pinLoad(); }
+    else { TP.msg = (r && r.message) || '초기화하지 못했어요.'; TP.msgCls = 'err'; render(); }
+  }).withFailureHandler(function () { TP.busy = false; TP.msg = '연결을 확인해 주세요.'; TP.msgCls = 'err'; render(); })
+    .apiTeacherPinReset(KEY, TP.code, name);
+}
+
+function historyCard() {
+  var H = T.hist, c = h('div', { 'class': 'card' }, [
+    h('button', { 'class': 'back', text: '← 돌아가기', onclick: function () { T.hist = null; render(); } }),
+    h('div', { 'class': 'big', text: H.name + ' · 회차별 기록' })
+  ]);
+  if (H.loading) { c.appendChild(h('div', { 'class': 'center', text: '불러오는 중…' })); return c; }
+  if (!H.history.length) { c.appendChild(h('div', { 'class': 'center', text: '아직 기록이 없어요.' })); return c; }
+  var list = h('div', { style: 'margin-top:8px' });
+  H.history.forEach(function (r) {
+    var box = h('div', { 'class': 'hist' }, [h('div', { 'class': 'hl' }, [
+      h('span', { text: r.label + (r.current ? ' (진행 중)' : '') }),
+      r.submitted ? progBadge(r.progress) : h('span', { 'class': 'prog r', text: '미제출' })
+    ])]);
+    if (r.submitted) {
+      box.appendChild(h('div', { 'class': 'line muted', style: 'margin-top:2px', text: (r.due ? r.due + ' 수업 · ' : '') + '제출 ' + r.time }));
+      if (!r.items.length) box.appendChild(h('div', { 'class': 'line', text: '질문 없음' }));
+      else {
+        box.appendChild(h('div', { 'class': 'line', text: '질문 ' + r.items.length + '개: ' + r.items.map(function (x) { return x.name; }).join(', ') }));
+        r.items.forEach(function (x) {
+          if (!x.tag && !x.memo) return;
+          box.appendChild(h('div', { 'class': 'note' }, [h('b', { text: x.name }), ' ' + [x.tag, x.memo].filter(function (y) { return y; }).join(' — ')]));
+        });
+      }
+    }
+    list.appendChild(box);
+  });
+  c.appendChild(list);
+  return c;
+}
+
+function statsTab() {
+  var st = T.d.stats, wrap = h('div');
+  var c = h('div', { 'class': 'card' });
+  c.appendChild(h('div', { 'class': 'sub', text: T.d.cls.name + ' · 지난 회차 ' + st.completedRounds + '회 기준 (진행 중 회차 제외) · 이름을 누르면 회차별 기록' }));
+  if (!st.completedRounds) {
+    c.appendChild(h('div', { 'class': 'center', text: '회차가 쌓이면 여기에 학생별 통계가 나와요.' }));
+    wrap.appendChild(c); return wrap;
+  }
+  var tb = h('table', { 'class': 'tbl' });
+  tb.appendChild(h('tr', null, ['학생', '제출', '숙제 완료', '연속 완료', '질문 수', '회당 평균'].map(function (t) { return h('th', { text: t }); })));
+  st.students.forEach(function (s) {
+    tb.appendChild(h('tr', { 'class': 'clk', onclick: function () { openHistory(s.name); } }, [
+      h('td', null, [h('span', { 'class': 'n', style: 'color:#1557b0;text-decoration:underline;text-underline-offset:3px', text: s.name })]),
+      h('td', { text: s.submitted + '/' + s.rounds }),
+      h('td', { text: s.done + '/' + s.rounds }),
+      h('td', { 'class': s.streakDone >= 3 ? 'green' : '', text: String(s.streakDone) }),
+      h('td', { text: String(s.questions) }),
+      h('td', { text: s.avg })
+    ]));
+  });
+  c.appendChild(h('div', { 'class': 'scroll', style: 'margin-top:10px' }, [tb]));
+  c.appendChild(h('div', { 'class': 'line muted', text: '숙제 완료 = "다 했어요"를 고른 회차. 연속 완료 = 최근부터 연달아 "다 했어요"(3회 이상 초록). 회당 평균 = 제출한 회차당 질문 수.' }));
+  wrap.appendChild(c);
+
+  var tagged = st.students.filter(function (s) { return s.topTag; });
+  if (tagged.length) {
+    var c2 = h('div', { 'class': 'card' }, [h('div', { 'class': 'sub', text: '학생별로 가장 많이 고른 상태' })]);
+    tagged.forEach(function (s) { c2.appendChild(h('div', { 'class': 'sr' }, [h('span', { 'class': 'n', text: s.name }), h('span', { 'class': 'v', text: s.topTag })])); });
+    wrap.appendChild(c2);
+  }
+
+  var c3 = h('div', { 'class': 'card' }, [h('div', { 'class': 'sub', text: '회차별 요약 (최근 20회)' })]);
+  st.rounds.forEach(function (r) {
+    c3.appendChild(h('div', { 'class': 'sr' }, [
+      h('span', { 'class': 'v', text: r.label }),
+      h('span', { 'class': 'tm', text: '제출 ' + r.submitted + '/' + r.total + ' · 다 함 ' + r.done + ' · 질문 문항 수 ' + r.problems })
+    ]));
+  });
+  wrap.appendChild(c3);
+  return wrap;
+}
+
+function setTab() {
+  var d = T.d, cur = d.rounds.filter(function (x) { return x.current; })[0];
+  var r = d.round && d.round.current ? d.round : null;
+  var edit = T.mode === 'edit' && r;
+  if (!T.form) {
+    var copyParts = r ? r.parts.map(function (p) { return { label: p.label, from: String(p.from), to: String(p.to) }; }) : [{ label: '', from: '1', to: '' }];
+    T.form = edit ? { parts: copyParts, due: r.dueISO || d.nextDue } : { parts: copyParts, due: d.nextDue };
+  }
+  var F = T.form, wrap = h('div');
+
+  function field(type, obj, key, ph) {
+    var e = h('input', { type: type, placeholder: ph || '' });
+    e.value = obj[key];
+    e.oninput = function () { obj[key] = e.value; };
+    return e;
+  }
+  function switchMode(m) { T.mode = m; T.form = null; T.confirmNew = false; T.msg = ''; T.justStarted = false; render(); }
+
+  var partsBox = h('div');
+  partsBox.appendChild(h('div', { 'class': 'prow', style: 'font-size:12px;color:#667' }, [h('span', { text: '자료 이름' }), h('span', { text: '시작' }), h('span', { text: '끝' }), h('span')]));
+  F.parts.forEach(function (p, i) {
+    partsBox.appendChild(h('div', { 'class': 'prow' }, [
+      field('text', p, 'label', i === 0 ? '예: 3단원 프린트' : '예: 4단원'),
+      field('number', p, 'from'), field('number', p, 'to'),
+      h('button', { 'class': 'x', text: '×', onclick: function () { if (F.parts.length > 1) { F.parts.splice(i, 1); render(); } } })
+    ]));
+  });
+  partsBox.appendChild(h('button', { 'class': 'add', text: '+ 범위 추가', onclick: function () { F.parts.push({ label: '', from: '1', to: '' }); render(); } }));
+
+  function send(mode) {
+    T.msg = '저장하는 중…'; T.msgCls = 'muted'; render();
+    google.script.run.withSuccessHandler(function (res) {
+      T.confirmNew = false;
+      if (res && res.ok) {
+        T.msg = mode === 'new' ? '새 회차를 시작했어요. 학생 화면에 바로 반영돼요.' : '현재 회차를 수정했어요.'; T.msgCls = 'green';
+        T.justStarted = mode === 'new'; T.roundId = null; T.form = null; T.mode = 'new'; load(true);
+      } else { T.msg = (res && res.message) || '저장하지 못했어요.'; T.msgCls = 'red'; render(); }
+    }).withFailureHandler(function (e) { T.msg = '연결 오류: ' + (e && e.message ? e.message : ''); T.msgCls = 'red'; render(); })
+      .apiTeacherRound(KEY, d.cls.code, mode, F.parts, F.due);
+  }
+
+  var kids;
+  if (edit) {
+    kids = [
+      h('button', { 'class': 'back', text: '← 새 숙제 등록으로', onclick: function () { switchMode('new'); } }),
+      h('div', { 'class': 'big', text: '지금 회차 고치기 · ' + d.cls.name }),
+      h('div', { 'class': 'sub', text: '범위나 기한을 잘못 넣었을 때 고쳐요. 지금까지 받은 질문은 그대로 남아요.' }),
+      h('label', { text: '숙제 범위' }), partsBox,
+      h('label', { text: '숙제 기한' }), field('date', F, 'due'),
+      h('button', { 'class': 'b pri', style: 'width:100%;margin-top:14px', text: '수정 저장', onclick: function () { send('edit'); } })
+    ];
+  } else {
+    kids = [
+      h('div', { 'class': 'big', text: '새 숙제 등록 · ' + d.cls.name }),
+      h('div', { 'class': 'sub', text: '수업이 끝나면 다음 숙제 범위를 넣고 새 회차를 시작하세요. 지금 회차는 기록으로 남아요.' }),
+      h('label', { text: '숙제 범위 (자료가 여러 개면 범위 추가)' }), partsBox,
+      h('label', { text: '숙제 기한 (다음 수업일이 미리 들어가 있어요. 다르면 바꿔 주세요)' }), field('date', F, 'due'),
+      h('button', {
+        'class': 'b ' + (T.confirmNew ? 'warn' : 'pri'), style: 'width:100%;margin-top:14px',
+        text: T.confirmNew ? '한 번 더 누르면 시작' : '새 회차 시작',
+        onclick: function () {
+          if (!T.confirmNew) { T.confirmNew = true; T.msg = '학생 화면이 이 숙제로 바뀌어요. 범위와 기한을 확인하고 한 번 더 눌러 주세요.'; T.msgCls = 'amber'; render(); return; }
+          send('new');
+        }
+      })
+    ];
+  }
+  if (T.msg) kids.push(h('div', { 'class': 'msg ' + T.msgCls, text: T.msg }));
+  if (!edit && T.justStarted && d.kakaoHw) kids.push(h('button', { 'class': 'b pri', style: 'width:100%;margin-top:10px', text: '숙제 알림 복사 (카톡에 붙여넣기)', onclick: function () { copy(d.kakaoHw); } }));
+  if (!edit && cur) kids.push(h('button', { 'class': 'link', style: 'margin-top:14px;padding:0;font-size:13px;color:#1a73e8;background:none;border:none;cursor:pointer', text: '지금 회차 범위·기한 고치기 →', onclick: function () { switchMode('edit'); } }));
+  wrap.appendChild(h('div', { 'class': 'card' }, kids));
+
+  var c2 = h('div', { 'class': 'card' }, [h('div', { 'class': 'big', text: '학생용 링크' })]);
+  if (d.appLink) {
+    c2.appendChild(h('div', { 'class': 'sub', text: '모든 반이 같은 링크를 써요. 학생은 앱에서 반을 골라요.' }));
+    c2.appendChild(h('div', { 'class': 'line', text: '설치 안내: ' + d.appLink }));
+    c2.appendChild(h('div', { 'class': 'line', text: '앱 바로 열기: ' + d.appOpen }));
+    c2.appendChild(h('div', { 'class': 'two', style: 'margin-top:8px' }, [
+      h('button', { 'class': 'b', text: '설치 링크 복사', onclick: function () { copy(d.appLink); } }),
+      h('button', { 'class': 'b', text: '바로 열기 복사', onclick: function () { copy(d.appOpen); } })
+    ]));
+    [['① 공지 고정용 (처음 한 번 올려서 공지로 고정)', d.kakaoPin, '공지용 복사'],
+     ['② 이번 숙제 알림용 (새 회차 시작 후 올리기 · 숙제 내용 자동 반영)', d.kakaoHw, '숙제 알림 복사']].forEach(function (k) {
+      if (!k[1]) return;
+      var ta = h('textarea', { rows: String(k[1].split('\n').length + 1), readonly: 'readonly' });
+      ta.value = k[1]; ta.onclick = function () { ta.select(); };
+      setTimeout(function () { ta.style.height = 'auto'; ta.style.height = (ta.scrollHeight + 4) + 'px'; }, 0);
+      c2.appendChild(h('label', { text: k[0] }));
+      c2.appendChild(ta);
+      c2.appendChild(h('button', { 'class': 'b', style: 'width:100%;margin-top:8px', text: k[2], onclick: function () { copy(k[1]); } }));
+    });
+  } else {
+    c2.appendChild(h('div', { 'class': 'sub', text: "'설정' 시트의 '웹앱 주소' 칸에 배포 URL을 넣으면 여기에 링크가 나와요." }));
+  }
+  wrap.appendChild(c2);
+  return wrap;
+}
+
+/* ── H5 (미니테스트) 탭 ── */
+var TH = { d: null, testId: null, mode: 'view', form: null, open: null, confirm: '', msg: '', msgCls: '', proxyName: null, nick: {} };
+
+function h5Reset() { TH.d = null; TH.testId = null; TH.mode = 'view'; TH.form = null; TH.open = null; TH.confirm = ''; TH.msg = ''; TH.nick = {}; }
+
+TH.cache = {};
+function h5Load(keepMsg) {
+  if (!keepMsg) TH.msg = '';
+  var code = T.d.cls.code;
+  if (!TH.d && !TH.testId && TH.cache[code]) { TH.d = TH.cache[code]; TH.testId = TH.d.test ? TH.d.test.id : null; }   // 받아 둔 것 먼저
+  google.script.run.withSuccessHandler(function (r) {
+    if (T.d.cls.code !== code) return;
+    if (!r || !r.ok) { TH.d = null; TH.msg = r ? r.message : '오류가 발생했어요.'; TH.msgCls = 'red'; render(); return; }
+    TH.d = r; TH.testId = r.test ? r.test.id : null; TH.cache[code] = r; render();
+  }).withFailureHandler(function (e) { TH.msg = '연결 오류: ' + (e && e.message ? e.message : ''); TH.msgCls = 'red'; render(); })
+    .apiTeacherH5(KEY, T.d.cls.code, TH.testId || '');
+}
+
+/** 서버 작업 공통: 저장 → 성공 문구 → 다시 불러오기 */
+function h5Call(fn, args, okMsg, after) {
+  TH.msg = '저장하는 중…'; TH.msgCls = 'muted'; render();
+  var run = google.script.run.withSuccessHandler(function (r) {
+    if (r && r.ok) { TH.msg = okMsg; TH.msgCls = 'green'; if (after) after(r); h5Load(true); }
+    else { TH.msg = (r && r.message) || '저장하지 못했어요.'; TH.msgCls = 'red'; render(); }
+  }).withFailureHandler(function (e) { TH.msg = '연결 오류: ' + (e && e.message ? e.message : ''); TH.msgCls = 'red'; render(); });
+  run[fn].apply(run, [KEY, T.d.cls.code].concat(args));
+}
+
+function h5MsgEl() { return TH.msg ? h('div', { 'class': 'msg ' + TH.msgCls, text: TH.msg }) : null; }
+
+function h5Tab() {
+  var wrap = h('div');
+  if (!TH.d) { wrap.appendChild(h('div', { 'class': 'card center', text: TH.msg || '불러오는 중…' })); return wrap; }
+  var D = TH.d, t = D.test;
+  var top = h('div', { 'class': 'card' }, [
+    h('button', { 'class': 'refresh', text: '새로고침', onclick: function () { h5Load(); } }),
+    h('div', { 'class': 'big', text: D.title + ' · ' + T.d.cls.name })
+  ]);
+  if (D.tests.length) {
+    var sel = h('select', { onchange: function () { TH.testId = sel.value; TH.mode = 'view'; TH.form = null; TH.open = null; TH.confirm = ''; h5Load(); } });
+    D.tests.forEach(function (x) { var o = h('option', { value: x.id, text: x.label }); if (t && x.id === t.id) o.selected = true; sel.appendChild(o); });
+    top.appendChild(sel);
+  } else top.appendChild(h('div', { 'class': 'sub', style: 'margin-top:6px', text: '아직 등록한 ' + D.title + '가 없어요. 수업 전에 정답 5개를 등록해 두세요.' }));
+  if (TH.mode === 'view') top.appendChild(h('button', { 'class': 'b pri', style: 'width:100%;margin-top:10px', text: '+ 새 ' + D.title + ' 등록', onclick: function () { h5StartForm(null); } }));
+  wrap.appendChild(top);
+
+  if (TH.mode === 'new' || TH.mode === 'edit') { wrap.appendChild(h5FormCard()); return wrap; }
+  if (TH.mode === 'proxy') { wrap.appendChild(h5ProxyCard()); return wrap; }
+  if (t) {
+    wrap.appendChild(h5TestCard());
+    if (t.live) wrap.appendChild(h5StudentsCard());
+  } else if (TH.msg) top.appendChild(h5MsgEl());
+  if (D.cum && D.cum.tests) wrap.appendChild(h5CumCard());
+  return wrap;
+}
+
+function h5StartForm(test) {
+  TH.mode = test ? 'edit' : 'new'; TH.msg = ''; TH.confirm = '';
+  TH.form = {
+    title: test ? test.title : '', pdf: test ? test.pdf : '',
+    ans: { vals: (test ? test.answers : ['', '', '', '', '']).map(uiAns), cur: 0 }
+  };
+  render(); window.scrollTo(0, 0);
+}
+
+function h5FormCard() {
+  var F = TH.form, edit = TH.mode === 'edit', t = TH.d.test, D = TH.d;
+  var title = h('input', { type: 'text', maxlength: '40', placeholder: '예: 순열 복습 (선택)' });
+  title.value = F.title; title.oninput = function () { F.title = title.value; };
+  var pdf = h('input', { type: 'text', placeholder: 'https://drive.google.com/… (선택, 나중에 넣어도 돼요)' });
+  pdf.value = F.pdf; pdf.oninput = function () { F.pdf = pdf.value; };
+  return h('div', { 'class': 'card' }, [
+    h('button', { 'class': 'back', text: '← 취소', onclick: function () { TH.mode = 'view'; TH.form = null; TH.msg = ''; render(); } }),
+    h('div', { 'class': 'big', text: edit ? '정답·PDF 고치기' : '새 ' + D.title + ' 등록 · ' + T.d.cls.name }),
+    h('div', { 'class': 'sub', text: edit ? (t.live ? '정답을 고치면 이미 낸 학생도 자동으로 다시 채점돼요.' : '아직 시작 전이에요.') : '저장하면 준비 상태로 남아요. 학생에게는 [시작]을 눌러야 보여요.' }),
+    h('label', { text: '제목' }), title,
+    h('label', { text: '정답 5개 (문항마다 숫자 / ㄱㄴㄷ 선택 · 학생과 같은 버튼)' }), uiAnsForm(F.ans, render, true),
+    h('label', { text: '문제·해설 PDF 링크 (드라이브 공유 링크)' }), pdf,
+    h('button', { 'class': 'b pri', style: 'width:100%;margin-top:14px', text: '저장', onclick: function () {
+      var bad = [];
+      F.ans.vals.forEach(function (x, k) { if (uiIsEmpty(x) || uiAnsErr(x)) bad.push((k + 1) + '번'); });
+      if (bad.length) { TH.msg = bad.join(', ') + ' 정답을 확인해 주세요.'; TH.msgCls = 'red'; render(); return; }
+      h5Call('apiTeacherH5Save', [edit ? t.id : '', F.title, F.ans.vals.map(uiKeyText), F.pdf],
+        edit ? '고쳤어요.' : '등록했어요. 시험지를 나눠 줄 때 [시작]을 누르세요.',
+        function (r) { TH.testId = r.id; TH.mode = 'view'; TH.form = null; });
+    } }),
+    h5MsgEl()
+  ]);
+}
+
+function h5TestCard() {
+  var D = TH.d, t = D.test, st = D.stat, kids = [];
+  kids.push(h('div', { 'class': 'hl' }, [h('span', { text: t.title || '(제목 없음)' }), h('span', { 'class': 'prog ' + (!t.live ? 'y' : t.today ? 'g' : 'n'), text: !t.live ? '준비' : t.today ? '진행 중' : '종료' })]));
+  kids.push(h('div', { 'class': 'sub', text: t.live ? t.startText + ' 시작' : '등록 ' + t.createdText + ' · 학생에게는 아직 안 보여요' }));
+  var g = h('div', { 'class': 'ansg' });
+  t.answers.forEach(function (x, k) {
+    g.appendChild(h('div', { 'class': 'ag' }, [
+      h('div', { 'class': 'sub', text: (k + 1) + '번' }),
+      h('div', { 'class': 'agv' }, [uiMath(uiAns(x), false)]),
+      chParse(x) ? h('div', { 'class': 'sub chn', text: 'ㄱ~' + chLetters().charAt(chParse(x).n - 1) }) : null,
+      t.live && st.count ? h('div', { 'class': 'agr', text: '정답률 ' + st.rate[k] + '%' }) : null
+    ]));
+  });
+  kids.push(g);
+  if (t.live) {
+    kids.push(h('div', { 'class': 'metrics' }, [
+      h('div', { 'class': 'm' }, [h('b', { text: st.count + '/' + st.total }), h('span', { text: '응시' })]),
+      h('div', { 'class': 'm' }, [h('b', { text: String(st.avg) }), h('span', { text: '평균' })]),
+      h('div', { 'class': 'm' }, [h('b', { text: String(st.full) }), h('span', { text: '만점' })])
+    ]));
+    if (st.count) kids.push(h('div', { 'class': 'line', text: '점수별: ' + st.dist.filter(function (x) { return x.n; }).map(function (x) { return x.score + '점 ' + x.n + '명'; }).join(' · ') }));
+    kids.push(h('div', { 'class': 'line ' + (st.missing.length ? 'red' : 'green'), text: '미응시: ' + (st.missing.length ? st.missing.join(', ') : '없음') }));
+  }
+  kids.push(t.pdf ? h('a', { 'class': 'line', href: t.pdf, target: '_blank', rel: 'noopener', text: '📄 문제·해설 PDF 열기' })
+    : h('div', { 'class': 'line amber', text: "PDF 링크가 아직 없어요. '정답·PDF 고치기'에서 넣으면 제출한 학생에게 바로 보여요." }));
+
+  var btns = [];
+  if (!t.live) btns.push(h('button', { 'class': 'b ' + (TH.confirm === 'start' ? 'warn' : 'pri'), style: 'grid-column:span 2', text: TH.confirm === 'start' ? '한 번 더 누르면 시작' : '▶ 시작 (시험지 나눠 줄 때)', onclick: function () {
+    if (TH.confirm !== 'start') { TH.confirm = 'start'; TH.msg = '학생 화면 맨 위에 바로 나타나요. 한 번 더 눌러 주세요.'; TH.msgCls = 'amber'; render(); return; }
+    TH.confirm = ''; h5Call('apiTeacherH5Start', [t.id], '시작했어요. 학생 화면 맨 위에 나타났어요.');
+  } }));
+  btns.push(h('button', { 'class': 'b', text: '정답·PDF 고치기', onclick: function () { h5StartForm(t); } }));
+  if (D.classes.length) btns.push(h('button', { 'class': 'b', text: '다른 반에도 등록', onclick: function () { TH.confirm = TH.confirm === 'copy' ? '' : 'copy'; TH.msg = ''; render(); } }));
+  if (!t.live || !st.count) btns.push(h('button', { 'class': 'b ' + (TH.confirm === 'del' ? 'warn' : ''), text: TH.confirm === 'del' ? '한 번 더 누르면 삭제' : '삭제', onclick: function () {
+    if (TH.confirm !== 'del') { TH.confirm = 'del'; TH.msg = '이 테스트를 지워요.'; TH.msgCls = 'amber'; render(); return; }
+    TH.confirm = ''; h5Call('apiTeacherH5Delete', [t.id], '삭제했어요.', function () { TH.testId = null; });
+  } }));
+  kids.push(h('div', { 'class': 'btns' }, btns));
+  if (TH.confirm === 'copy') {
+    var row = h('div', { 'class': 'copyr' });
+    D.classes.forEach(function (c) {
+      row.appendChild(h('button', { 'class': 'b', text: c.name + '에 등록', onclick: function () { TH.confirm = ''; h5Call('apiTeacherH5Copy', [t.id, c.code], c.name + '에 준비 상태로 등록했어요. 그 반에서 [시작]을 누르세요.'); } }));
+    });
+    kids.push(h('div', { 'class': 'line muted', text: '같은 제목·정답·PDF로 준비 상태로 만들어져요.' }));
+    kids.push(row);
+  }
+  if (!TH.open) kids.push(h5MsgEl());
+  return h('div', { 'class': 'card' }, kids);
+}
+
+function h5StudentsCard() {
+  var D = TH.d, c = h('div', { 'class': 'card' }, [h('div', { 'class': 'sub', style: 'margin-bottom:4px', text: '이름을 누르면 답 확인 · 대신 입력 · 제출 취소 · 닉네임 변경' })]);
+  D.students.forEach(function (s) {
+    var open = TH.open === s.name;
+    c.appendChild(h('div', { 'class': 'sr clk', onclick: function () { TH.open = open ? null : s.name; TH.confirm = ''; TH.msg = ''; render(); } }, [
+      h('span', { 'class': 'n', text: s.name }),
+      h('span', { 'class': 'v' }, [
+        s.submitted ? h('b', { text: s.score + '점  ' }) : h('span', { 'class': 'red', text: '미응시  ' }),
+        s.submitted ? h('span', { 'class': 'okx', text: s.marks.map(function (m) { return m ? '○' : '×'; }).join(' ') }) : null,
+        h('span', { 'class': 'muted', text: '  ' + (s.nick || '닉네임 없음') })
+      ]),
+      s.time ? h('span', { 'class': 'tm', text: (s.by === '선생님' ? '대신 입력 · ' : '') + s.time }) : null
+    ]));
+    if (open) c.appendChild(h5StuPanel(s));
+  });
+  return c;
+}
+
+function h5StuPanel(s) {
+  var t = TH.d.test, p = h('div', { 'class': 'panel2' });
+  if (s.submitted) {
+    var g = h('div', { 'class': 'ansg', style: 'margin-top:0' });
+    s.answers.forEach(function (x, k) {
+      g.appendChild(h('div', { 'class': 'ag ' + (s.marks[k] ? 'agok' : 'agng') }, [
+        h('div', { 'class': 'sub', text: (k + 1) + '번 ' + (s.marks[k] ? '○' : '×') }),
+        h('div', { 'class': 'agv' }, [x ? uiMath(uiAns(x), false) : h('span', { 'class': 'muted', text: '빈칸' })])
+      ]));
+    });
+    p.appendChild(g);
+    var cc = TH.confirm === 'cancel';
+    p.appendChild(h('button', { 'class': 'b ' + (cc ? 'warn' : ''), style: 'width:100%;margin-top:10px', text: cc ? '한 번 더 누르면 제출 취소' : '제출 취소', onclick: function () {
+      if (!cc) { TH.confirm = 'cancel'; TH.msg = s.name + ' 학생의 제출을 지워요. 학생이 다시 응시할 수 있어요.'; TH.msgCls = 'amber'; render(); return; }
+      TH.confirm = ''; h5Call('apiTeacherH5Cancel', [t.id, s.name], s.name + ' 학생의 제출을 취소했어요.');
+    } }));
+  } else {
+    p.appendChild(h('button', { 'class': 'b pri', style: 'width:100%', text: '대신 입력 (시험지 보고)', onclick: function () {
+      TH.mode = 'proxy'; TH.proxyName = s.name; TH.msg = '';
+      TH.form = { ans: { vals: t.answers.map(function (x) { var c = chParse(x); return uiBlank(c ? c.n : 0); }), cur: 0 } };
+      render(); window.scrollTo(0, 0);
+    } }));
+  }
+  var inp = h('input', { type: 'text', maxlength: '8', placeholder: '닉네임 2~8자' });
+  inp.value = TH.nick[s.name] != null ? TH.nick[s.name] : s.nick;
+  inp.oninput = function () { TH.nick[s.name] = inp.value; };
+  p.appendChild(h('label', { text: '닉네임' + (s.nick ? '' : ' (아직 없음)') }));
+  p.appendChild(inp);
+  p.appendChild(h('div', { 'class': 'btns', style: 'margin-top:8px' }, [
+    h('button', { 'class': 'b', text: '닉네임 저장', onclick: function () { h5Call('apiTeacherH5Nick', [s.name, inp.value], '닉네임을 바꿨어요.', function () { delete TH.nick[s.name]; }); } }),
+    h('button', { 'class': 'b', text: '닉네임 초기화', onclick: function () { h5Call('apiTeacherH5Nick', [s.name, ''], '닉네임을 지웠어요. 다음에 들어오면 다시 정해요.', function () { delete TH.nick[s.name]; }); } })
+  ]));
+  var m = h5MsgEl();
+  if (m) p.appendChild(m);
+  return p;
+}
+
+function h5ProxyCard() {
+  var t = TH.d.test, name = TH.proxyName, F = TH.form;
+  return h('div', { 'class': 'card' }, [
+    h('button', { 'class': 'back', text: '← 돌아가기', onclick: function () { TH.mode = 'view'; TH.form = null; TH.msg = ''; render(); } }),
+    h('div', { 'class': 'big', text: name + ' · 대신 입력' }),
+    h('div', { 'class': 'sub', text: '시험지에 적힌 답을 입력하세요. 빈칸은 틀린 것으로 처리돼요.' }),
+    uiAnsForm(F.ans, render),
+    h('button', { 'class': 'b pri', style: 'width:100%;margin-top:14px', text: '저장', onclick: function () {
+      var bad = [];
+      F.ans.vals.forEach(function (x, k) { if (uiAnsErr(x)) bad.push((k + 1) + '번'); });
+      if (bad.length) { TH.msg = bad.join(', ') + ' 답을 확인해 주세요.'; TH.msgCls = 'red'; render(); return; }
+      h5Call('apiTeacherH5Proxy', [t.id, name, F.ans.vals.map(uiAnsText)], name + ' 학생 답을 저장했어요.',
+        function () { TH.mode = 'view'; TH.form = null; TH.open = name; });
+    } }),
+    h5MsgEl()
+  ]);
+}
+
+function h5CumCard() {
+  var C = TH.d.cum, tb = h('table', { 'class': 'tbl' });
+  tb.appendChild(h('tr', null, ['학생', '닉네임', '응시', '평균', '만점'].map(function (x) { return h('th', { text: x }); })));
+  C.rows.forEach(function (r) {
+    tb.appendChild(h('tr', null, [
+      h('td', { text: r.name }), h('td', { 'class': 'muted', text: r.nick || '-' }),
+      h('td', { text: r.taken + '/' + r.of }), h('td', { text: r.avg }), h('td', { text: String(r.full) })
+    ]));
+  });
+  return h('div', { 'class': 'card' }, [
+    h('div', { 'class': 'sub', text: '누적 · 시작한 ' + TH.d.title + ' ' + C.tests + '회 기준 (학생 등록일 이후) · 평균은 응시한 회차만' }),
+    h('div', { 'class': 'scroll', style: 'margin-top:8px' }, [tb])
+  ]);
+}
+
+function copy(text) {
+  T.justStarted = false;
+  function done(ok) { T.msg = ok ? '복사했어요.' : '복사가 안 되면 글자를 길게 눌러 직접 복사하세요.'; T.msgCls = ok ? 'green' : 'amber'; render(); }
+  function fallback() {
+    try {
+      var t = document.createElement('textarea'); t.value = text; document.body.appendChild(t); t.select();
+      var ok = document.execCommand('copy'); document.body.removeChild(t); return ok;
+    } catch (e) { return false; }
+  }
+  try {
+    if (navigator.clipboard && navigator.clipboard.writeText) navigator.clipboard.writeText(text).then(function () { done(true); }, function () { done(fallback()); });
+    else done(fallback());
+  } catch (e) { done(fallback()); }
+}
+
+load();
+</script></body></html>
