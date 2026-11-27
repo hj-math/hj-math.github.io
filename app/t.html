@@ -134,7 +134,7 @@ a.line{display:block;color:#1a73e8}
 <body><div class="wrap" id="app"><div class="center">불러오는 중…</div></div>
 <script>
 window.SHELL = true;
-var SHELL_EXEC = "https://script.google.com/macros/s/AKfycbxjb1lhGBwB_EK6MaEa2hzrxqkjD56IYyRwzgLrKzq2Qv6nVJBbD0pZ1dUdG6jf0qjj/exec", SHELL_VER = "v7_1127", SHELL_T0 = Date.now();
+var SHELL_EXEC = "https://script.google.com/macros/s/AKfycbxjb1lhGBwB_EK6MaEa2hzrxqkjD56IYyRwzgLrKzq2Qv6nVJBbD0pZ1dUdG6jf0qjj/exec", SHELL_VER = "v8_1127", SHELL_T0 = Date.now();
 // 새 버전 확인: 구글 응답의 버전(v)이 이 화면 버전과 다르면 → 새 화면을 받아 저장하고 바로 새로 고침
 // (열자마자면 바로, 쓰는 중이면 입력이 날아가지 않게 위에 '새로 고침' 띠만 띄움)
 function SHELL_UPDATE(v) {
@@ -494,6 +494,7 @@ function uiAnsForm(F, rerender, kindSwitch) {
   return box;
 }
 var T = { code: null, roundId: null, d: null, tab: 'q', confirmNew: false, msg: '', msgCls: '', form: null, hist: null, mode: 'new', cache: TBOOT || {} };
+setTimeout(function () { Object.keys(T.cache).forEach(function (k) { tExtra(T.cache[k]); }); }, 0);   // v8: 저장해 둔 H5도 바로 쓰게 (TH가 만들어진 뒤)
 
 function h(tag, attrs, kids) {
   var e = document.createElement(tag);
@@ -515,8 +516,24 @@ function progBadge(p) {
   return h('span', { 'class': 'prog ' + c, text: p });
 }
 
-function load(keepMsg) {
+/* v8: 기기에 저장 (학생 비밀번호 숫자는 저장하지 않음 → 화면에서 최신을 받으면 다시 보임) */
+function tSave() {
+  if (!window.SHELL) return;
+  try { localStorage.setItem('h5tboot', JSON.stringify(T.cache, function (k, v) { return k === 'pin' ? undefined : v; })); } catch (e) {}
+}
+/* v8: 반 데이터에 함께 온 H5·비밀번호를 각 탭 저장소에 넣음 → 탭이 바로 열림 */
+function tExtra(d) {
+  var x = d && d.extra; if (!x) return;
+  if (x.h5 && x.h5.ok) TH.cache[d.cls.code] = x.h5;
+}
+function tHist(name) { var c = T.d && T.cache[T.d.cls.code], x = (T.d && T.d.extra) || (c && c.extra); return x && x.hist ? x.hist[name] : null; }
+function tPins() { var c = T.d && T.cache[T.d.cls.code], x = (T.d && T.d.extra) || (c && c.extra); return x && x.pins ? x.pins : null; }
+function load(keepMsg, given) {
   if (!keepMsg) T.msg = '';
+  if (given && given.ok) {   // v8: 저장 응답에 새 데이터가 같이 옴 → 요청 없이 바로
+    T.cache[given.cls.code] = given; tExtra(given); tSave();
+    T.d = given; T.code = given.cls.code; T.roundId = given.round ? given.round.id : null; lsSet('t_code', T.code); render(); return;
+  }
   var want = T.code || lsGet('t_code') || '';
   var hit = T.cache[want], rid = T.roundId || '';   // 받아 둔 데이터가 있으면 먼저 바로 보여 주고, 뒤에서 최신으로 바꿈
   if (hit && hit.ok && !rid) { show(hit); }
@@ -526,8 +543,8 @@ function load(keepMsg) {
     T.loading = false;
     if (!d || !d.ok) { if (!T.d) center(d ? d.message : '오류가 발생했어요.'); return; }
     if (!rid || (d.round && d.round.id === rid)) {
-      T.cache[d.cls.code] = d;
-      if (window.SHELL) { try { localStorage.setItem('h5tboot', JSON.stringify(T.cache)); } catch (e) {} }   // 설치 앱: 다음에 켤 때 바로 보여 줌
+      T.cache[d.cls.code] = d; tExtra(d);
+      tSave();   // 설치 앱: 다음에 켤 때 바로 보여 줌
     }
     if (T.code && d.cls.code !== T.code) return;   // 그사이 다른 반을 눌렀으면 무시
     if (!rid && hit && T.roundId !== shown) return;   // 그사이 다른 회차를 눌렀으면 화면은 그대로
@@ -549,12 +566,14 @@ function prefetch() {
   T.d.classes.forEach(function (c) {
     if (T.cache[c.code] || T.pf === c.code) return;
     T.pf = c.code;
-    google.script.run.withSuccessHandler(function (d) { if (d && d.ok) { T.cache[d.cls.code] = d; if (window.SHELL) { try { localStorage.setItem('h5tboot', JSON.stringify(T.cache)); } catch (e) {} } } T.pf = null; prefetch(); })
+    google.script.run.withSuccessHandler(function (d) { if (d && d.ok) { T.cache[d.cls.code] = d; tExtra(d); tSave(); } T.pf = null; prefetch(); })
       .withFailureHandler(function () { T.pf = null; }).apiTeacher(KEY, c.code, '');
   });
 }
 
 function openHistory(name) {
+  var pre = tHist(name);
+  if (pre) { T.hist = { name: name, history: pre }; render(); window.scrollTo(0, 0); return; }   // v8: 미리 받아 둔 기록
   T.hist = { name: name, loading: true }; render();
   google.script.run.withSuccessHandler(function (r) {
     if (!r || !r.ok) { T.hist = null; T.msg = r ? r.message : ''; render(); return; }
@@ -683,7 +702,12 @@ function pinLoad() {
   }).apiTeacherPins(KEY, TP.code);
 }
 function pinCard() {
-  if (TP.code !== T.d.cls.code) { TP.list = null; TP.show = {}; TP.confirm = ''; TP.msg = ''; pinLoad(); }
+  if (TP.code !== T.d.cls.code) {
+    TP.list = null; TP.show = {}; TP.confirm = ''; TP.msg = '';
+    var pre = tPins();
+    if (pre && pre.length && (!pre.some(function (x) { return x.has; }) || pre.some(function (x) { return x.pin; }))) { TP.code = T.d.cls.code; TP.list = pre; }   // v8: 미리 받은 목록
+    else pinLoad();
+  }
   var c = h('div', { 'class': 'card' }, [h('div', { 'class': 'big', text: '학생 비밀번호' })]);
   if (!TP.list) { c.appendChild(h('div', { 'class': 'center', text: '불러오는 중…' })); return c; }
   var done = TP.list.filter(function (x) { return x.has; }).length;
@@ -719,7 +743,7 @@ function pinReset(name) {
   TP.busy = true;
   google.script.run.withSuccessHandler(function (r) {
     TP.busy = false; TP.confirm = '';
-    if (r && r.ok) { TP.msg = name + ' 비밀번호를 초기화했어요.'; TP.msgCls = 'ok'; TP.show[name] = false; pinLoad(); }
+    if (r && r.ok) { TP.msg = name + ' 비밀번호를 초기화했어요.'; TP.msgCls = 'ok'; TP.show[name] = false; if (r.d && r.d.ok) { TP.list = r.d.list; var x = T.d && T.d.extra; if (x) x.pins = r.d.list; render(); } else pinLoad(); }
     else { TP.msg = (r && r.message) || '초기화하지 못했어요.'; TP.msgCls = 'err'; render(); }
   }).withFailureHandler(function () { TP.busy = false; TP.msg = '연결을 확인해 주세요.'; TP.msgCls = 'err'; render(); })
     .apiTeacherPinReset(KEY, TP.code, name);
@@ -832,7 +856,7 @@ function setTab() {
       T.confirmNew = false;
       if (res && res.ok) {
         T.msg = mode === 'new' ? '새 회차를 시작했어요. 학생 화면에 바로 반영돼요.' : '현재 회차를 수정했어요.'; T.msgCls = 'green';
-        T.justStarted = mode === 'new'; T.roundId = null; T.form = null; T.mode = 'new'; load(true);
+        T.justStarted = mode === 'new'; T.roundId = null; T.form = null; T.mode = 'new'; load(true, res.d);
       } else { T.msg = (res && res.message) || '저장하지 못했어요.'; T.msgCls = 'red'; render(); }
     }).withFailureHandler(function (e) { T.msg = '연결 오류: ' + (e && e.message ? e.message : ''); T.msgCls = 'red'; render(); })
       .apiTeacherRound(KEY, d.cls.code, mode, F.parts, F.due);
@@ -917,7 +941,14 @@ function h5Load(keepMsg) {
 function h5Call(fn, args, okMsg, after) {
   TH.msg = '저장하는 중…'; TH.msgCls = 'muted'; render();
   var run = google.script.run.withSuccessHandler(function (r) {
-    if (r && r.ok) { TH.msg = okMsg; TH.msgCls = 'green'; if (after) after(r); h5Load(true); }
+    if (r && r.ok) {
+      TH.msg = okMsg; TH.msgCls = 'green'; if (after) after(r);
+      if (r.d && r.d.ok) {   // v8: 저장 응답에 새 H5 데이터가 같이 옴 → 요청 없이 바로
+        TH.d = r.d; TH.testId = r.d.test ? r.d.test.id : null;
+        if (!r.d.test || !r.d.tests.length || r.d.tests[0].id === r.d.test.id) TH.cache[T.d.cls.code] = r.d;
+        render();
+      } else h5Load(true);
+    }
     else { TH.msg = (r && r.message) || '저장하지 못했어요.'; TH.msgCls = 'red'; render(); }
   }).withFailureHandler(function (e) { TH.msg = '연결 오류: ' + (e && e.message ? e.message : ''); TH.msgCls = 'red'; render(); });
   run[fn].apply(run, [KEY, T.d.cls.code].concat(args));

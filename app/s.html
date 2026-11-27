@@ -174,7 +174,7 @@ body{margin:0;background:#f3f4f6;color:#1f2328;font-family:-apple-system,BlinkMa
 <body><div class="wrap" id="app"><div class="center">불러오는 중…</div></div>
 <script>
 window.SHELL = true;
-var SHELL_EXEC = "https://script.google.com/macros/s/AKfycbxjb1lhGBwB_EK6MaEa2hzrxqkjD56IYyRwzgLrKzq2Qv6nVJBbD0pZ1dUdG6jf0qjj/exec", SHELL_VER = "v7_1127", SHELL_T0 = Date.now();
+var SHELL_EXEC = "https://script.google.com/macros/s/AKfycbxjb1lhGBwB_EK6MaEa2hzrxqkjD56IYyRwzgLrKzq2Qv6nVJBbD0pZ1dUdG6jf0qjj/exec", SHELL_VER = "v8_1127", SHELL_T0 = Date.now();
 // 새 버전 확인: 구글 응답의 버전(v)이 이 화면 버전과 다르면 → 새 화면을 받아 저장하고 바로 새로 고침
 // (열자마자면 바로, 쓰는 중이면 입력이 날아가지 않게 위에 '새로 고침' 띠만 띄움)
 function SHELL_UPDATE(v) {
@@ -588,7 +588,7 @@ function start() {
     if (kb && BOOT.classes.some(function (c) { return c.code === kb; })) CODE = kb;
   }
   if (!CODE) { renderClasses(); return; }
-  var pre = BOOT.init && BOOT.init.code === CODE ? BOOT.init : null;
+  var pre = BOOT.init && BOOT.init.code === CODE ? BOOT.init : (BOOT.inits && BOOT.inits[CODE]) || null;   // v8: 모든 반 정보를 미리 받아 둠
   BOOT.init = null;   // 처음 한 번만 사용
   if (pre) begin(pre);
   else {
@@ -708,6 +708,8 @@ function authLost(r) {   // 서버가 로그인키를 거절함 (비밀번호가
   pinOpen(S.name, r && r.hasPin === false ? 'set' : 'login', '비밀번호를 다시 입력해 주세요.');
 }
 function pickName(n) {   // 이름을 누르면 그 이름에 비밀번호가 있는지 확인하고 입력/만들기 화면
+  var pins = (S.d && S.d.pins) || (BOOT.inits && BOOT.inits[CODE] && BOOT.inits[CODE].pins);
+  if (pins) { pinOpen(n, pins[n] ? 'login' : 'set'); return; }   // v8: 미리 받은 정보로 바로 (틀리면 서버가 바로잡음)
   center('불러오는 중…');
   google.script.run.withSuccessHandler(function (d) {
     if (d && d.ok) S.d = d;
@@ -785,7 +787,8 @@ function pinCall(fn, args) {
       S.tok = r.tok; S.temp = P.temp;
       if (!S.temp) lsSet('qtok_' + CODE, r.tok);
       if (P.mode === 'change') { S.msg = '비밀번호를 바꿨어요.'; S.msgCls = 'ok'; render(); window.scrollTo(0, 0); return; }
-      S.alert = 0; chooseName(P.name, S.temp); return;
+      S.alert = 0; try { (S.d.pins || BOOT.inits[CODE].pins)[P.name] = 1; } catch (e) {}
+      chooseName(P.name, S.temp, null, r.boot); return;   // v8: 로그인 응답에 숙제 화면 데이터가 같이 옴
     }
     if (r && r.reason === 'hasPin') { P.mode = 'login'; P.step = 0; }
     else if (r && r.reason === 'noPin') { P.mode = 'set'; P.step = 0; }
@@ -811,7 +814,7 @@ function alertCard() {   // 남이 내 이름으로 비밀번호를 틀린 기�
 }
 function pinAlertSeen() { S.alert = 0; google.script.run.apiPinAlertSeen(CODE, S.name, S.tok); }
 
-function chooseName(n, noSave, onAuthFail) {
+function chooseName(n, noSave, onAuthFail, pre) {
   S.name = n;
   S.sel = {}; S.order = []; S.open = null; S.saved = null; S.peer = null; S.me = null; S.progress = ''; S.msg = ''; S.needProg = false;
   H.d = null; H.view = null; H.form = null; H.open = null;
@@ -821,9 +824,11 @@ function chooseName(n, noSave, onAuthFail) {
   if (hit && hit.tok === (S.tok || '') && hit.r && hit.r.round) {
     showBoot(hit.r, true); S.syncing = true; render();
     snap = JSON.stringify([S.sel, S.progress, H.view, H.form]);
-  } else center('불러오는 중…');
-  // v6: 로그인 확인 + 내 숙제 기록 + H5를 한 번에 받음
-  google.script.run.withSuccessHandler(function (r) {
+  } else if (!pre) center('불러오는 중…');
+  // v6: 로그인 확인 + 내 숙제 기록 + H5를 한 번에 받음 (v8: 로그인 응답에 이미 있으면 요청 없이)
+  if (pre && pre.ok) { done(pre); return; }
+  google.script.run.withSuccessHandler(done).withFailureHandler(function (e) { S.syncing = false; if (hit) render(); else fail(e); }).apiStudentBoot(CODE, n, S.tok || '');
+  function done(r) {
     S.syncing = false;
     if (!r || !r.ok) { if (hit) render(); else center(r ? r.message : '오류가 발생했어요.'); return; }
     if (!r.auth || !r.auth.ok) { lsDel(ck); if (onAuthFail) onAuthFail(r); else authLost({ hasPin: r.auth && r.auth.hasPin }); return; }
@@ -832,7 +837,7 @@ function chooseName(n, noSave, onAuthFail) {
     if (snap !== null && JSON.stringify([S.sel, S.progress, H.view, H.form]) !== snap) { S.alert = r.auth.alert || 0; render(); return; }   // 그사이 학생이 입력을 시작했으면 화면은 그대로
     showBoot(r, !hit);
     render();
-  }).withFailureHandler(function (e) { S.syncing = false; if (hit) render(); else fail(e); }).apiStudentBoot(CODE, n, S.tok || '');
+  }
 }
 function showBoot(r, setTab) {
   S.d = r; S.alert = (r.auth && r.auth.alert) || 0;
@@ -846,8 +851,9 @@ function showBoot(r, setTab) {
 window.__onBoot = function (b) {
   if (!b) return;
   BOOT.classes = b.classes || BOOT.classes;
+  if (b.inits) BOOT.inits = b.inits;
   if (S.screen === 'classes' && !CODE) renderClasses();
-  else if (S.screen === 'names' && b.init && b.init.ok && b.init.code === CODE) { S.d = b.init; renderNames(); }
+  else if (S.screen === 'names') { var ni = b.init && b.init.ok && b.init.code === CODE ? b.init : (b.inits && b.inits[CODE]); if (ni && ni.ok) { S.d = ni; renderNames(); } }
 };
 function applyMine(r) {
   if (r && r.ok && r.me) S.me = r.me;
