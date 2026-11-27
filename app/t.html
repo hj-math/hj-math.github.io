@@ -134,7 +134,7 @@ a.line{display:block;color:#1a73e8}
 <body><div class="wrap" id="app"><div class="center">불러오는 중…</div></div>
 <script>
 window.SHELL = true;
-var SHELL_EXEC = "https://script.google.com/macros/s/AKfycbxjb1lhGBwB_EK6MaEa2hzrxqkjD56IYyRwzgLrKzq2Qv6nVJBbD0pZ1dUdG6jf0qjj/exec", SHELL_VER = "v8_1127-3", SHELL_T0 = Date.now();
+var SHELL_EXEC = "https://script.google.com/macros/s/AKfycbxjb1lhGBwB_EK6MaEa2hzrxqkjD56IYyRwzgLrKzq2Qv6nVJBbD0pZ1dUdG6jf0qjj/exec", SHELL_VER = "v8_1127-4", SHELL_T0 = Date.now();
 ['pointerdown', 'keydown'].forEach(function (ev) { window.addEventListener(ev, function () { window.__touched = true; }, true); });
 // 새 버전 확인: 구글 응답의 버전(v)이 이 화면 버전과 다르면 → 새 화면을 받아 저장하고 바로 새로 고침
 // (열자마자면 바로, 쓰는 중이면 입력이 날아가지 않게 위에 '새로 고침' 띠만 띄움)
@@ -888,7 +888,7 @@ function setTab() {
   if (edit) {
     kids = [
       h('button', { 'class': 'back', text: '← 새 숙제 등록으로', onclick: function () { switchMode('new'); } }),
-      h('div', { 'class': 'big', text: '지금 회차 고치기 · ' + d.cls.name }),
+      h('div', { 'class': 'big', text: '지금 회차 수정 · ' + d.cls.name }),
       h('div', { 'class': 'sub', text: '범위나 기한을 잘못 넣었을 때 고쳐요. 지금까지 받은 질문은 그대로 남아요.' }),
       h('label', { text: '숙제 범위' }), partsBox,
       h('label', { text: '숙제 기한' }), field('date', F, 'due'),
@@ -912,7 +912,7 @@ function setTab() {
   }
   if (T.msg) kids.push(h('div', { 'class': 'msg ' + T.msgCls, text: T.msg }));
   if (!edit && T.justStarted && d.kakaoHw) kids.push(h('button', { 'class': 'b pri', style: 'width:100%;margin-top:10px', text: '숙제 알림 복사 (카톡에 붙여넣기)', onclick: function () { copy(d.kakaoHw); } }));
-  if (!edit && cur) kids.push(h('button', { 'class': 'link', style: 'margin-top:14px;padding:0;font-size:13px;color:#1a73e8;background:none;border:none;cursor:pointer', text: '지금 회차 범위·기한 고치기 →', onclick: function () { switchMode('edit'); } }));
+  if (!edit && cur) kids.push(h('button', { 'class': 'link', style: 'margin-top:14px;padding:0;font-size:13px;color:#1a73e8;background:none;border:none;cursor:pointer', text: '지금 회차 범위·기한 수정 →', onclick: function () { switchMode('edit'); } }));
   wrap.appendChild(h('div', { 'class': 'card' }, kids));
 
   var c2 = h('div', { 'class': 'card' }, [h('div', { 'class': 'big', text: '학생용 링크' })]);
@@ -984,7 +984,7 @@ function h5Tab() {
   var D = TH.d, t = D.test;
   var top = h('div', { 'class': 'card' }, [
     h('button', { 'class': 'refresh', text: '새로고침', onclick: function () { h5Load(); } }),
-    h('div', { 'class': 'big', text: D.title + ' · ' + T.d.cls.name })
+    h('div', { 'class': 'big', text: (D.title === 'H5' ? 'H5 하이파이브' : D.title) + ' · ' + T.d.cls.name })
   ]);
   if (D.tests.length) {
     var sel = h('select', { onchange: function () { TH.testId = sel.value; TH.mode = 'view'; TH.form = null; TH.open = null; TH.confirm = ''; h5Load(); } });
@@ -1015,15 +1015,15 @@ function h5StartForm(test) {
 
 function h5FormCard() {
   var F = TH.form, edit = TH.mode === 'edit', t = TH.d.test, D = TH.d;
-  var title = h('input', { type: 'text', maxlength: '40', placeholder: '예: 순열 복습 (선택)' });
+  var title = h('input', { type: 'text', maxlength: '40', placeholder: '예: 복소수 연산, 판별식 활용 유형 (선택)' });
   title.value = F.title; title.oninput = function () { F.title = title.value; };
   var pdf = h('input', { type: 'text', placeholder: 'https://drive.google.com/… (선택, 나중에 넣어도 돼요)' });
   pdf.value = F.pdf; pdf.oninput = function () { F.pdf = pdf.value; };
   return h('div', { 'class': 'card' }, [
     h('button', { 'class': 'back', text: '← 취소', onclick: function () { TH.mode = 'view'; TH.form = null; TH.msg = ''; render(); } }),
-    h('div', { 'class': 'big', text: edit ? '정답·PDF 고치기' : '새 ' + D.title + ' 등록 · ' + T.d.cls.name }),
+    h('div', { 'class': 'big', text: edit ? '시험 이름·정답·파일 수정' : '새 ' + D.title + ' 등록 · ' + T.d.cls.name }),
     h('div', { 'class': 'sub', text: edit ? (t.live ? '정답을 고치면 이미 낸 학생도 자동으로 다시 채점돼요.' : '아직 시작 전이에요.') : '저장하면 준비 상태로 남아요. 학생에게는 [시작]을 눌러야 보여요.' }),
-    h('label', { text: '제목' }), title,
+    h('label', { text: '시험 이름' }), title,
     h('label', { text: '정답 5개 (문항마다 숫자 / ㄱㄴㄷ 선택 · 학생과 같은 버튼)' }), uiAnsForm(F.ans, render, true),
     h('label', { text: '문제·해설 PDF 링크 (드라이브 공유 링크)' }), pdf,
     h('button', { 'class': 'b pri', style: 'width:100%;margin-top:14px', text: '저장', onclick: function () {
@@ -1062,14 +1062,14 @@ function h5TestCard() {
     kids.push(h('div', { 'class': 'line ' + (st.missing.length ? 'red' : 'green'), text: '미응시: ' + (st.missing.length ? st.missing.join(', ') : '없음') }));
   }
   kids.push(t.pdf ? h('a', { 'class': 'line', href: t.pdf, target: '_blank', rel: 'noopener', text: '📄 문제·해설 PDF 열기' })
-    : h('div', { 'class': 'line amber', text: "PDF 링크가 아직 없어요. '정답·PDF 고치기'에서 넣으면 제출한 학생에게 바로 보여요." }));
+    : h('div', { 'class': 'line amber', text: "PDF 링크가 아직 없어요. '이름·정답·파일 수정'에서 넣으면 제출한 학생에게 바로 보여요." }));
 
   var btns = [];
   if (!t.live) btns.push(h('button', { 'class': 'b ' + (TH.confirm === 'start' ? 'warn' : 'pri'), style: 'grid-column:span 2', text: TH.confirm === 'start' ? '한 번 더 누르면 시작' : '▶ 시작 (시험지 나눠 줄 때)', onclick: function () {
     if (TH.confirm !== 'start') { TH.confirm = 'start'; TH.msg = '학생 화면 맨 위에 바로 나타나요. 한 번 더 눌러 주세요.'; TH.msgCls = 'amber'; render(); return; }
     TH.confirm = ''; h5Call('apiTeacherH5Start', [t.id], '시작했어요. 학생 화면 맨 위에 나타났어요.');
   } }));
-  btns.push(h('button', { 'class': 'b', text: '정답·PDF 고치기', onclick: function () { h5StartForm(t); } }));
+  btns.push(h('button', { 'class': 'b', text: '이름·정답·파일 수정', onclick: function () { h5StartForm(t); } }));
   if (D.classes.length) btns.push(h('button', { 'class': 'b', text: '다른 반에도 등록', onclick: function () { TH.confirm = TH.confirm === 'copy' ? '' : 'copy'; TH.msg = ''; render(); } }));
   if (!t.live || !st.count) btns.push(h('button', { 'class': 'b ' + (TH.confirm === 'del' ? 'warn' : ''), text: TH.confirm === 'del' ? '한 번 더 누르면 삭제' : '삭제', onclick: function () {
     if (TH.confirm !== 'del') { TH.confirm = 'del'; TH.msg = '이 테스트를 지워요.'; TH.msgCls = 'amber'; render(); return; }
