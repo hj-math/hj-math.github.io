@@ -92,7 +92,7 @@ body{margin:0;background:#f3f4f6;color:#1f2328;font-family:-apple-system,BlinkMa
 .cal .c1{background:#34a853;color:#fff;font-weight:800}.cal .c2{background:#a8dab5;color:#0d652d;font-weight:800}.cal .c3{background:#f6aea9;color:#a50e0e;font-weight:800}.cal .c0{background:#e8eaed;color:#5f6368;font-weight:800}.cal .c4{box-shadow:inset 0 0 0 2px #34a853;color:#137333;font-weight:800}
 .cal .ct{outline:2px solid #1a73e8;outline-offset:-2px}
 .cleg{display:flex;flex-wrap:wrap;justify-content:center;gap:4px 10px;font-size:11px;color:#5f6368;margin-top:8px}.cleg span{white-space:nowrap;display:inline-flex;align-items:center}.cleg .c1{background:#34a853}.cleg .c2{background:#a8dab5}.cleg .c3{background:#f6aea9}.cleg .c0{background:#e8eaed}.cleg .c4{box-shadow:inset 0 0 0 2px #34a853}
-.me{font-size:11px;color:#1557b0;background:#e7f0fe;border-radius:6px;padding:1px 6px;white-space:nowrap}
+.me.ph{visibility:hidden}.me{font-size:11px;color:#1557b0;background:#e7f0fe;border-radius:6px;padding:1px 6px;white-space:nowrap}
 .mycard{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-top:10px}
 .mybox{background:#f6f8fa;border-radius:10px;padding:10px;text-align:center}
 .mybox b{display:block;font-size:22px;color:#137333}
@@ -137,6 +137,47 @@ body{margin:0;background:#f3f4f6;color:#1f2328;font-family:-apple-system,BlinkMa
 .br .sc{text-align:right;font-weight:600}
 .br.mine{background:#e7f0fe;border-radius:8px;font-weight:700;color:#1557b0}
 .br.md3{grid-template-columns:26px 44px 1fr 44px}.br.md3>span{text-align:left}.br.md3 .md{text-align:center}.br.md3 .sc{text-align:right}
+.ftabs{display:flex;gap:4px}.ftabs button{flex:1;display:flex;align-items:center;justify-content:center;gap:6px;white-space:nowrap;letter-spacing:-.3px;border:none;font-family:inherit;padding:12px 4px 11px;border-radius:14px 14px 0 0;font-weight:800;font-size:15px;color:#7a808a;background:#e2e5e9;cursor:pointer}
+.ftabs button.on{background:#fff;color:#1f2328;box-shadow:0 -2px 6px rgba(0,0,0,.05)}.ftabs img{width:22px;height:22px;border-radius:6px}.ftabs button:not(.on) img{filter:grayscale(.6);opacity:.75}.ftabs .fe{font-size:18px}
+.tabbody{background:#fff;border-radius:0 0 16px 16px;padding:12px 12px 2px;margin-bottom:12px}.tabbody .card{box-shadow:none;border:1px solid #eef0f2}
+.nbadge{display:inline-flex;align-items:center;justify-content:center;min-width:18px;height:18px;border-radius:9px;background:#ea4335;color:#fff;font-size:11px;font-weight:800;padding:0 5px}
+body.hasnav{padding-bottom:84px}.bnav{position:fixed;left:0;right:0;bottom:0;z-index:20;display:flex;background:#fff;border-top:1px solid #e3e5e8;padding-bottom:env(safe-area-inset-bottom)}
+.bnav button{flex:1;border:none;background:none;font-family:inherit;display:flex;flex-direction:column;align-items:center;gap:3px;padding:9px 0 8px;font-size:12px;font-weight:700;color:#8a8f98;position:relative;cursor:pointer}
+.bnav button.on{color:#1a4fd0}.bnav button.on::before{content:'';position:absolute;top:0;left:32%;right:32%;height:3px;border-radius:0 0 3px 3px;background:#1a4fd0}
+.bnav .fe{font-size:24px;line-height:28px;filter:grayscale(1);opacity:.55}.bnav button.on .fe{filter:none;opacity:1}
+.bnav .ni{position:relative}.bnav img{width:28px;height:28px;border-radius:7px;filter:grayscale(1);opacity:.55}.bnav button.on img{filter:none;opacity:1}.bnav .ni .nbadge{position:absolute;top:-5px;right:-12px}
+.alertln{display:flex;align-items:center;gap:8px;width:100%;text-align:left;font-family:inherit;background:#fff4e5;border:1px solid #f7c98b;color:#8a4b00;border-radius:12px;padding:10px 10px;font-size:13px;letter-spacing:-.3px;font-weight:700;margin-bottom:10px;cursor:pointer}
+.alertln img{width:24px;height:24px;border-radius:6px}.alertln .at{flex:1}.alertln .ag{color:#1a4fd0;white-space:nowrap}
+.lblx{font-size:13px;font-weight:800;color:#4b5058;margin:6px 4px 6px}
+.hwcur{display:block;width:100%;text-align:left;font-family:inherit;background:#fff;border:2px solid #1a73e8;border-radius:16px;padding:14px;cursor:pointer;box-shadow:0 3px 10px rgba(26,115,232,.12);margin-bottom:6px}
+.hwtop{display:flex;align-items:center;gap:8px}.live{font-size:11.5px;font-weight:800;color:#fff;background:#1a73e8;border-radius:999px;padding:3px 9px}.live.new{background:#d93025}.live.red{background:#e37400}
+.hwcur .due{margin:0}.hwname{font-size:17px;font-weight:800;margin-top:10px;white-space:pre-line;color:#1f2328}.hwst{margin-top:8px}
+.hwgo{display:block;margin-top:12px;background:#1a73e8;color:#fff;text-align:center;border-radius:12px;padding:12px;font-size:16px;font-weight:800}
+.hwl{padding:4px 10px}.hwrow{display:flex;align-items:center;gap:10px;width:100%;border:none;background:none;font-family:inherit;text-align:left;padding:13px 4px;border-bottom:1px solid #f1f3f4;cursor:pointer;color:#1f2328}
+.hwrow:last-child{border-bottom:none}.hwrow.cur{background:#f4f8ff;border:2px solid #1a73e8;border-radius:12px;margin:6px 0 4px;padding:12px 10px}
+.hwl1{flex:1;display:flex;flex-direction:column;gap:4px;min-width:0}.hwmeta{display:flex;align-items:center;gap:6px}.hwdue{font-size:12.5px;color:#667;font-weight:600}.hwrow.cur .hwdue{color:#1a4fd0;font-weight:800}.hwdue.old{color:#b06000}
+.hwt{font-size:15px;font-weight:800;line-height:1.35;word-break:keep-all}.hwrow:not(.cur) .hwt{font-weight:700;font-size:14.5px}
+.hwrow .chev{font-size:22px;color:#9aa0a6}.pchip.todo{background:#1a73e8;color:#fff}
+.pchip{display:inline-block;font-size:12px;font-weight:800;padding:3px 9px;border-radius:999px;white-space:nowrap}
+.pchip.c1{background:#dcf5e3;color:#137333}.pchip.c2{background:#e6f4ea;color:#0d652d}.pchip.c3{background:#fce8e6;color:#a50e0e}.pchip.c0{background:#eef0f2;color:#5f6368}
+.pastl{padding:4px 12px}.pastr{display:flex;align-items:center;gap:10px;width:100%;border:none;background:none;font-family:inherit;text-align:left;padding:12px 2px;border-bottom:1px solid #f1f3f4;cursor:pointer;color:#1f2328}
+.pastr:last-child{border-bottom:none}.pastr .pdt{width:62px;font-size:13px;color:#667;flex:0 0 auto}.pastr .pn{flex:1;font-size:14px;font-weight:700;line-height:1.35}.pastr .chev{font-size:20px;color:#9aa0a6}
+.backl{border:none;background:none;font-family:inherit;color:#1a73e8;font-size:15px;font-weight:700;padding:4px 2px 10px;cursor:pointer}
+.curc{padding:16px 16px 14px;border:2px solid #1a73e8;background:#f8fbff}.cc1{display:flex;align-items:center;gap:8px}
+.cctag{font-size:12px;font-weight:800;color:#fff;background:#1a73e8;border-radius:999px;padding:3px 10px}.cctag.new{background:#d93025}.cctag.old{background:#e37400}
+.ccdate{font-size:13.5px;font-weight:800;color:#1a4fd0;flex:1}.cct{font-size:17px;font-weight:800;margin:8px 0 12px;line-height:1.35;word-break:keep-all}
+.ccbtn{width:100%;border:none;border-radius:12px;background:#1a73e8;color:#fff;font:inherit;font-size:16px;font-weight:800;padding:13px;cursor:pointer}
+.ccbtn.alt{background:#fff;color:#1a73e8;border:1.5px solid #c6dafc}
+.stm{font-size:13px;font-weight:700;white-space:nowrap}.stm.ok{color:#188038}.stm.no{color:#9aa0a6;font-weight:600}
+.hwrow .hwl1{gap:3px}.hwrow .hwdue{font-size:12.5px;font-weight:500;color:#80868b}
+.whor{display:flex;justify-content:space-between;align-items:center;gap:8px;margin:18px 6px 4px;font-size:13px;color:#80868b}.whor .link{font-size:12.5px;margin-left:8px}
+.frhint{font-size:12px;color:#1a4fd0;background:#eef3fd;border-radius:8px;padding:5px 9px;margin:4px 0 2px;display:inline-block}
+.due.past{background:#eef0f2;color:#5f6368}
+.rank.late{font-size:13.5px;color:#80868b;font-weight:600}
+.rtt{font-size:17px;font-weight:800;color:#1f2328}.rtt .cls{font-weight:500;font-size:13.5px}
+.notice2{font-size:12px;color:#8a8f98;margin-top:8px;line-height:1.5;white-space:pre-line}
+.calt{display:block;margin:10px auto 0;border:none;background:#f1f3f4;color:#4b5058;font-family:inherit;font-size:13px;font-weight:700;padding:7px 14px;border-radius:999px;cursor:pointer}
+.qchips{display:flex;flex-wrap:wrap;gap:6px;margin-top:8px}.qc{font-size:13px;font-weight:800;color:#1a4fd0;background:#e8f0fe;border-radius:8px;padding:4px 9px}
 .rcmp{display:flex;justify-content:center;gap:6px;flex-wrap:wrap;margin-top:8px}.rchip{font-size:12px;font-weight:800;padding:4px 10px;border-radius:999px;background:#eef3fe;color:#1a4fd0}.rchip.up{background:#dcf5e3;color:#137333}.rchip.dn{background:#f1f3f4;color:#5f6368}
 .mk .pr{display:block;font-size:10.5px;color:#5f6368;margin-top:1px}.mk .hard{display:block;font-size:10px;font-weight:800;color:#b06000}
 .rnote{font-size:12.5px;text-align:center;font-weight:700;margin-top:8px;color:#137333}.rnote.wait{color:#667;font-weight:600}
@@ -214,7 +255,7 @@ body{margin:0;background:#f3f4f6;color:#1f2328;font-family:-apple-system,BlinkMa
 <body><div class="wrap" id="app"><div class="center">불러오는 중…</div></div>
 <script>
 window.SHELL = true;
-var SHELL_EXEC = "https://script.google.com/macros/s/AKfycbxjb1lhGBwB_EK6MaEa2hzrxqkjD56IYyRwzgLrKzq2Qv6nVJBbD0pZ1dUdG6jf0qjj/exec", SHELL_VER = "v8_1127-4", SHELL_T0 = Date.now();
+var SHELL_EXEC = "https://script.google.com/macros/s/AKfycbxjb1lhGBwB_EK6MaEa2hzrxqkjD56IYyRwzgLrKzq2Qv6nVJBbD0pZ1dUdG6jf0qjj/exec", SHELL_VER = "v9_1128", SHELL_T0 = Date.now();
 ['pointerdown', 'keydown'].forEach(function (ev) { window.addEventListener(ev, function () { window.__touched = true; }, true); });
 // 새 버전 확인: 구글 응답의 버전(v)이 이 화면 버전과 다르면 → 새 화면을 받아 저장하고 바로 새로 고침
 // (열자마자면 바로, 쓰는 중이면 입력이 날아가지 않게 위에 '새로 고침' 띠만 띄움)
@@ -601,7 +642,8 @@ function uiAnsForm(F, rerender, kindSwitch) {
   box.appendChild(uiPad(F.vals[F.cur], function (cmd) { if (cmd === 'next') F.cur = (F.cur + 1) % F.vals.length; rerender(); }));
   return box;
 }
-var S = { d: null, name: null, progress: '', sel: {}, order: [], open: null, saved: null, peer: null, me: null, busy: false, msg: '', msgCls: '', needProg: false };
+var S = { d: null, name: null, progress: '', sel: {}, order: [], open: null, saved: null, peer: null, me: null, busy: false, msg: '', msgCls: '', needProg: false, hw: null, calOpen: false, past: [] };
+var TAB_POS = 'top';   // v9: 위 폴더 탭 (아래 메뉴 코드는 남겨 둠: 'bottom')
 
 function h(tag, attrs, kids) {
   var e = document.createElement(tag);
@@ -702,14 +744,14 @@ function endDemo() {
 }
 
 function headCard(withWho) {
-  var d = S.d, kids = [h('div', { 'class': 'cls', text: d.className })];
+  var d = S.d, inApp = S.screen === 'app', kids = inApp ? [] : [h('div', { 'class': 'cls', text: d.className })];   // v9: 숙제 화면에서는 반 이름 뺌 (목록에 있음)
   if (d.round.due) {
-    kids.push(h('div', { 'class': 'due' + (d.round.overdue ? ' old' : ''), text: d.round.due + ' 수업까지 숙제' }));
-    if (d.round.overdue) kids.push(h('div', { 'class': 'old-note', text: '기한이 지난 숙제예요. 새 숙제가 아직 안 올라왔을 수 있어요.' }));
+    kids.push(h('div', { 'class': 'due' + (d.round.overdue ? ' old' : ''), text: d.round.due + (inApp ? ' 숙제' : ' 수업까지 숙제') }));
+    if (d.round.overdue) kids.push(h('div', { 'class': 'old-note', text: '수업일이 지나서 이제 내거나 고칠 수 없어요.' }));
   }
   kids.push(h('div', { 'class': 'parts', text: d.round.parts.map(function (p) { return p.label + '  ' + p.from + '~' + p.to + '번'; }).join('\n') }));
-  if (d.notice) kids.push(h('div', { 'class': 'notice', text: d.notice }));
-  if (withWho) kids.push(h('div', { 'class': 'who' }, [
+  if (d.notice) kids.push(h('div', { 'class': inApp ? 'notice2' : 'notice', text: d.notice }));   // v9: 숙제 화면에서는 작은 글씨
+  if (withWho && !inApp) kids.push(h('div', { 'class': 'who' }, [
     h('span', {}, [h('span', { text: S.name }), S.temp && !DEMO ? h('span', { 'class': 'tmpb', text: '기억 안 함' }) : null]),
     DEMO ? h('span') : h('span', {}, [
       h('button', { 'class': 'link', text: '비밀번호 바꾸기', onclick: function () { pinOpen(S.name, 'change'); } }),
@@ -884,8 +926,11 @@ function showBoot(r, setTab) {
   S.d = r; S.alert = (r.auth && r.auth.alert) || 0;
   S.sel = {}; S.order = []; S.saved = null; S.peer = null; S.me = null; S.progress = '';
   applyMine(r.mine);
+  var prevId = H.d && H.d.current ? H.d.current.id : null;
   H.d = r.h5 && r.h5.ok ? r.h5 : null;
-  if (setTab) S.tab = H.d && H.d.current && H.d.current.today ? 'h5' : 'hw';
+  if (setTab) { S.tab = h5Fresh() ? 'h5' : 'hw'; S.hw = null; H.sel = null; S.autoTab = true; }
+  else { h5AutoTab(prevId); if (S.autoTab && S.tab === 'h5' && !H.sel && !h5Fresh()) S.tab = 'hw'; S.autoTab = false; }   // 캐시로 연 탭이 최신 정보와 다르면 맞춤 (학생이 탭을 안 건드렸을 때만)
+  S.past = r.past || S.past || [];
   S.screen = 'app';
 }
 /* 설치 앱(v7): 새 공개 정보가 오면 반·이름 고르는 화면일 때만 다시 그림 */
@@ -928,18 +973,32 @@ function render() {
   var db = demoBar();
   if (db) a.appendChild(db);
   if (S.syncing) a.appendChild(h('div', { 'class': 'syncbar', text: '최신 정보 확인 중…' }));
-  var tabs = h5Tabs();
-  if (tabs) a.appendChild(tabs);
+  var hasH5 = !!(H.d && H.d.current);
+  if (TAB_POS === 'bottom') { document.body.classList.add('hasnav'); if (hasH5) a.appendChild(bottomNav()); } else document.body.classList.remove('hasnav');
+  var tabs = TAB_POS === 'top' ? h5Tabs() : null;
   var al = alertCard();
   if (al) a.appendChild(al);
-  if (tabs && S.tab === 'h5') {
-    a.appendChild(h5Top());
-    var past = h5History();
-    if (past) a.appendChild(past);
+  if (hasH5 && S.tab === 'h5') {
+    if (tabs) a.appendChild(tabs);
+    var wrap = tabs ? h('div', { 'class': 'tabbody' }) : a;
+    if (!H.sel) h5List(wrap); else h5Detail(wrap);   // v9: 시험 목록 → 누르면 그 시험
+    if (tabs) a.appendChild(wrap);
     return;
   }
-  a.appendChild(headCard(true));
-  if (S.me) a.appendChild(myCard());
+  if (tabs) a.appendChild(tabs);
+  var body = tabs ? h('div', { 'class': 'tabbody' }) : a;
+  if (tabs) a.appendChild(body);
+  if (!S.hw) { hwList(body); return; }   // v9: 숙제 목록이 첫 화면
+  if (S.hw !== 'cur') { hwPast(body); return; }
+  body.appendChild(h('button', { 'class': 'backl', text: '← 숙제 목록', onclick: function () { S.hw = null; render(); window.scrollTo(0, 0); } }));
+  body.appendChild(headCard(false));
+  a = body;
+  if (d.round.overdue) {   // v9: 수업 다음 날부터는 보기만 (내 제출 + 반 현황 + 내 기록)
+    a.appendChild(closedCard());
+    if (S.saved && S.peer) a.appendChild(peerCard());
+    if (S.me) a.appendChild(myCard());
+    return;
+  }
 
   var card = h('div', { 'class': 'card' });
 
@@ -953,7 +1012,7 @@ function render() {
 
   card.appendChild(h('div', { 'class': 'lbl', style: 'margin-top:20px;margin-bottom:2px', text: '질문할 번호를 누르세요' }));
   d.round.parts.forEach(function (part, p) {
-    card.appendChild(h('div', { 'class': 'plbl', text: part.label + ' (' + part.from + '~' + part.to + '번)' }));
+    if (d.round.parts.length > 1) card.appendChild(h('div', { 'class': 'plbl', text: part.label + ' (' + part.from + '~' + part.to + '번)' }));
     var tiles = h('div', { 'class': 'tiles' });
     for (var n = part.from; n <= part.to; n++) (function (q) {
       var k = keyOf(p, q);
@@ -984,10 +1043,11 @@ function render() {
   a.appendChild(card);
 
   if (S.saved && S.peer) a.appendChild(peerCard());
+  if (S.me) a.appendChild(myCard());   // v9: 내 숙제 기록·달력은 지금 숙제 화면 맨 아래
 }
 
 /* ── H5 (미니테스트) ── */
-var H = { d: null, view: null, form: null, testId: null, busy: false, msg: '', msgCls: '', open: null, after: null, nickDraft: null };
+var H = { sel: null, d: null, view: null, form: null, testId: null, busy: false, msg: '', msgCls: '', open: null, after: null, nickDraft: null };
 // 랜덤 추천: 앞말 × 동물 조합을 누를 때마다 새로 뽑음 (8자 이하, 우리 반에서 이미 쓰는 닉네임은 빼고)
 var NICK_A = ['빠른', '졸린', '용감한', '배고픈', '반짝이는', '느긋한', '씩씩한', '수줍은', '엉뚱한', '신난', '조용한', '튼튼한', '날쌘', '꼼꼼한',
   '계산하는', '증명하는', '암산왕', '올클하는', '집중하는', '전설의', '무적의', '행복한', '든든한', '번뜩이는'];
@@ -1021,26 +1081,111 @@ function h5Head(t, suffix) {
 /* v8_1127-4: 이름 'H5 하이파이브' (설정 시트 이름이 H5일 때), 아이콘은 앱 아이콘 */
 var H5_ICON = window.SHELL ? '../icon-192.png' : 'https://hj-math.github.io/icon-192.png';
 function h5Full() { return H.d.title === 'H5' ? 'H5 하이파이브' : H.d.title; }
-/** 숙제 질문 | H5 하이파이브 탭 (카드형). H5 칸은 상황에 따라 진한 파랑/옅은 파랑 + 상태 글자 */
+function h5Badge() { var c = H.d && H.d.current; return c && !c.submitted ? h('span', { 'class': 'nbadge', text: '!' }) : null; }
+function goTab(t) { return function () { S.autoTab = false; if (S.tab === t) { if (t === 'hw') S.hw = null; else H.sel = null; } S.tab = t; render(); window.scrollTo(0, 0); }; }   // v9: 지금 탭을 또 누르면 목록으로
+/** v9: 위쪽 폴더 탭 (고른 탭만 하얗게 이어짐, 상태는 빨간 배지) */
 function h5Tabs() {
   if (!H.d || !H.d.current) return null;
-  var c = H.d.current, st;
-  if (!c.submitted && c.today) st = ['h5x', 'lb', 'NEW · 오늘 시험'];
-  else if (c.submitted && c.today) st = ['h5x', 'wh', '제출 완료 ✓'];
-  else if (!c.submitted) st = ['h5x', 'wh', '지난 시험 미제출'];
-  else st = ['h5s', 'gray', '지난 결과 보기'];
-  function go(t) { return function () { S.tab = t; render(); window.scrollTo(0, 0); }; }
-  return h('div', { 'class': 'stabs' }, [
-    h('button', { 'class': 'stab' + (S.tab === 'hw' ? ' on' : ''), onclick: go('hw') }, [
-      h('span', { 'class': 'se', text: '✋' }),
-      h('span', {}, [h('b', { text: '숙제 질문' }), S.saved ? h('span', { 'class': 'sbg grn', text: '제출 ✓' }) : h('span', { 'class': 'sbg mute', text: '아직 안 냄' })])
-    ]),
-    h('button', { 'class': 'stab ' + st[0] + (S.tab === 'h5' ? ' on' : ''), onclick: go('h5') }, [
-      h('img', { src: H5_ICON, alt: '' }),
-      h('span', {}, [h('b', { text: h5Full() }), h('span', { 'class': 'sbg ' + st[1], text: st[2] })])
+  return h('div', { 'class': 'ftabs' }, [
+    h('button', { 'class': S.tab === 'hw' ? 'on' : '', onclick: goTab('hw') }, [h('span', { 'class': 'fe', text: '✋' }), document.createTextNode('숙제 질문')]),
+    h('button', { 'class': S.tab === 'h5' ? 'on' : '', onclick: goTab('h5') }, [h('img', { src: H5_ICON, alt: '' }), document.createTextNode(h5Full()), h5Badge()])
+  ]);
+}
+/** v9: 아래 메뉴 (카톡처럼 화면 맨 아래 고정) */
+function bottomNav() {
+  return h('div', { 'class': 'bnav' }, [
+    h('button', { 'class': S.tab === 'hw' ? 'on' : '', onclick: goTab('hw') }, [h('span', { 'class': 'fe', text: '✋' }), h('span', { text: '숙제 질문' })]),
+    h('button', { 'class': S.tab === 'h5' ? 'on' : '', onclick: goTab('h5') }, [h('span', { 'class': 'ni' }, [h('img', { src: H5_ICON, alt: '' }), h5Badge()]), h('span', { text: h5Full() })])
+  ]);
+}
+/** v9: 알림 줄 (H5 시험이 있거나 안 낸 시험이 있을 때만). 누르면 H5로 */
+function h5Alert() {
+  var c = H.d && H.d.current; if (!c || c.submitted) return null;
+  var t = c.today ? '오늘 ' + h5Full() + ' 시험이 있어요' : '지난 ' + h5Full() + '를 아직 안 냈어요';
+  return h('button', { 'class': 'alertln', onclick: function () { S.tab = 'h5'; h5Pick(c)(); } }, [h('img', { src: H5_ICON, alt: '' }), h('span', { 'class': 'at', text: t }), h('span', { 'class': 'ag', text: (c.today ? '답 입력' : '풀러 가기') + ' →' })]);
+}
+/** v9: 숙제 탭 첫 화면 — '이번 숙제' 카드(큰 버튼 하나) + '지난 숙제' 목록 + 맨 아래 내 이름 */
+function stMark(done, no) { return done ? h('span', { 'class': 'stm ok', text: '✓ 제출' }) : h('span', { 'class': 'stm no', text: no || '미제출' }); }
+function curCard(o) {   // o: {tag, tagCls, date, title, done, btn, onclick}
+  return h('div', { 'class': 'card curc' }, [
+    h('div', { 'class': 'cc1' }, [h('span', { 'class': 'cctag ' + (o.tagCls || ''), text: o.tag }), h('span', { 'class': 'ccdate', text: o.date }), o.done ? stMark(true) : null]),
+    h('div', { 'class': 'cct', text: o.title }),
+    h('button', { 'class': o.done || o.alt ? 'ccbtn alt' : 'ccbtn', text: o.btn, onclick: o.onclick })
+  ]);
+}
+function pastList(label, rows) {
+  if (!rows.length) return null;
+  return h('div', {}, [h('div', { 'class': 'lblx', text: label }), h('div', { 'class': 'card hwl' }, rows.map(function (x) {
+    return h('button', { 'class': 'hwrow', onclick: x.onclick }, [
+      h('span', { 'class': 'hwl1' }, [h('span', { 'class': 'hwt', text: x.title }), h('span', { 'class': 'hwdue', text: x.date })]),
+      stMark(x.done, x.no), h('span', { 'class': 'chev', text: '›' })
+    ]);
+  }))]);
+}
+function whoRow(h5) {   // v9: 내 정보 바꾸기는 목록 맨 아래 (숙제 탭: 비밀번호·이름 / H5 탭: 닉네임)
+  if (h5) return h('div', { 'class': 'whor' }, [
+    h('span', { 'class': 'wn', text: S.name + ' · 닉네임: ' + (H.d.nick || '없음') }),
+    h('button', { 'class': 'link', text: '닉네임 바꾸기', onclick: function () { H.after = null; H.nickDraft = null; H.msg = ''; H.view = 'nick'; render(); window.scrollTo(0, 0); } })
+  ]);
+  return h('div', { 'class': 'whor' }, [
+    h('span', { 'class': 'wn' }, [document.createTextNode(S.d.className + ' · ' + S.name), S.temp && !DEMO ? h('span', { 'class': 'tmpb', text: '기억 안 함' }) : null]),
+    DEMO ? h('span') : h('span', {}, [
+      h('button', { 'class': 'link', text: '비밀번호 바꾸기', onclick: function () { pinOpen(S.name, 'change'); } }),
+      h('button', { 'class': 'link', text: '이름 바꾸기', onclick: logout })
     ])
   ]);
 }
+function hwList(a) {
+  var al = h5Alert(); if (al) a.appendChild(al);
+  var r = S.d.round, go = function (id) { return function () { S.hw = id; render(); window.scrollTo(0, 0); }; };
+  a.appendChild(h('div', { 'class': 'lblx', text: '이번 숙제' }));
+  a.appendChild(curCard({ tag: r.overdue ? '마감' : '진행 중', tagCls: r.overdue ? 'old' : '', date: r.due || '', done: !!S.saved, alt: r.overdue,
+    title: r.parts.map(function (p) { return p.label + ' ' + p.from + '~' + p.to + '번'; }).join(', '),
+    btn: r.overdue ? (S.saved ? '내 제출 보기' : '숙제 보기') : S.saved ? '내 제출 보기 · 고치기' : '질문할 번호 고르기', onclick: go('cur') }));
+  var pl = pastList('지난 숙제', (S.past || []).map(function (x) { return { title: x.parts, date: x.due, done: !!x.prog, onclick: go(x.id) }; }));
+  if (pl) a.appendChild(pl);
+  a.appendChild(whoRow());
+}
+function progChip(p, nq) {
+  var PG = (S.d && S.d.progress) || ['다 했어요', '일부만 했어요', '못 했어요'];
+  var cls = p === PG[0] ? 'c1' : p === PG[1] ? 'c2' : p === PG[2] ? 'c3' : 'c0';
+  return h('span', { 'class': 'pchip ' + cls, text: p ? (p === PG[1] ? '일부만' : p) + (nq ? ' · 질문 ' + nq : '') : '안 냄' });
+}
+/** v9: 수업일이 지난 지금 숙제 — 내 제출만 보여 줌 */
+function closedCard() {
+  var names = sortedKeys().map(function (k) { var x = S.sel[k]; return nameOf(x.p, x.q); });
+  return h('div', { 'class': 'card' }, [
+    h('div', { 'class': 'sec2', style: 'margin-top:0;border-top:none;padding-top:0', text: '내 제출' }),
+    S.saved ? h('div', {}, [progChip(S.progress, 0)]) : h('div', { 'class': 'cls', text: '이 숙제는 내지 않았어요.' }),
+    S.saved ? (names.length ? h('div', { 'class': 'qchips' }, names.map(function (q) { return h('span', { 'class': 'qc', text: q }); })) : h('div', { 'class': 'cls', style: 'margin-top:6px', text: '질문한 문항이 없어요.' })) : null
+  ]);
+}
+/** v9: 지난 숙제 보기 (수정 불가) */
+function hwPast(a) {
+  var x = null; (S.past || []).forEach(function (y) { if (y.id === S.hw) x = y; });
+  a.appendChild(h('button', { 'class': 'backl', text: '← 숙제 목록', onclick: function () { S.hw = null; render(); window.scrollTo(0, 0); } }));
+  if (!x) { a.appendChild(h('div', { 'class': 'card' }, [h('div', { 'class': 'cls', text: '숙제를 찾지 못했어요.' })])); return; }
+  var c = h('div', { 'class': 'card' }, [
+    h('div', { 'class': 'due past', text: x.due + ' 숙제' }),   // v9: 지금 숙제 화면과 같은 모양 (회색 = 지난 숙제)
+    h('div', { 'class': 'parts', text: x.parts }),
+    h('div', { 'class': 'notice2', text: '지난 숙제라 보기만 할 수 있어요.' }),
+    h('div', { 'class': 'sec2', text: '내 제출' }),
+    h('div', {}, [progChip(x.prog, 0)]),
+    x.qs.length ? h('div', { 'class': 'qchips' }, x.qs.map(function (q) { return h('span', { 'class': 'qc', text: q }); })) : h('div', { 'class': 'cls', style: 'margin-top:6px', text: x.prog ? '질문한 문항이 없어요.' : '이 숙제는 내지 않았어요.' }),
+    h('div', { 'class': 'sec2', text: '그때 우리 반이 많이 물어본 문항 · ' + x.total + '명 중 ' + x.sub + '명 제출' })
+  ]);
+  if (!x.top.length) c.appendChild(h('div', { 'class': 'cls', text: '질문한 문항이 없었어요.' }));
+  var mx = x.top.length ? x.top[0].count : 1;
+  x.top.forEach(function (it, i) {
+    c.appendChild(h('div', { 'class': 'bar' + (it.mine ? ' mine' : '') }, [
+      h('span', { 'class': 'rk2', text: String(i + 1) }), h('span', { 'class': 'nm', text: it.name }),
+      h('span', { 'class': 'w' }, [h('span', { 'class': 'f', style: 'width:' + Math.max(6, Math.round(it.count / mx * 100)) + '%' })]),
+      h('span', { 'class': 'c', text: it.count + '명' }), h('span', { 'class': 'me' + (it.mine ? '' : ' ph'), text: '나도' })
+    ]));
+  });
+  a.appendChild(c);
+}
+
 
 function h5Top() {
   if (!H.d || !H.d.current) return null;
@@ -1056,7 +1201,7 @@ function h5Top() {
 function h5Open(id) {
   var kt = (H.d.current && H.d.current.id === id ? H.d.current : (H.d.history || []).filter(function (x) { return x.id === id; })[0]) || {};
   if (H.testId !== id || !H.form) H.form = { vals: [0, 1, 2, 3, 4].map(function (k) { return uiBlank((kt.kinds || [])[k] || 0); }), cur: 0 };
-  H.testId = id; H.msg = ''; H.after = 'input'; H.nickDraft = null;
+  H.sel = id; H.testId = id; H.msg = ''; H.after = 'input'; H.nickDraft = null;
   H.view = H.d.nick ? 'input' : 'nick';
   render(); window.scrollTo(0, 0);
 }
@@ -1067,7 +1212,7 @@ function h5Test() {
   return d.history.filter(function (t) { return t.id === H.testId; })[0] || null;
 }
 
-function h5Back() { H.view = null; H.msg = ''; render(); }
+function h5Back() { var t = h5Test(); if (!t || !t.submitted) H.sel = null; H.view = null; H.msg = ''; render(); }
 
 function renderH5View() {
   var a = app(); a.innerHTML = '';
@@ -1080,8 +1225,10 @@ function h5Msg() { return H.msg ? h('div', { 'class': 'state ' + H.msgCls, text:
 
 function h5Input() {
   var t = h5Test();
-  return h('div', { 'class': 'card' }, [h('button', { 'class': 'link', style: 'padding:0 0 10px', text: '← 돌아가기', onclick: h5Back })].concat(h5Head(t)).concat([
-    h('div', { 'class': 'cls', style: 'margin:6px 0 2px', text: H.form.vals[H.form.cur].ch ? 'ㄱㄴㄷ 문항이에요. 옳은 것을 모두 누르세요. 다시 누르면 취소돼요.' : '번호를 누르고 아래 버튼으로 답을 넣으세요. 분수 버튼을 누를 때마다 분모 → 분자 → 분수 밖으로 이동해요.' }),
+  var cv = H.form.vals[H.form.cur];   // v9: 안내는 한 줄. 분수 칸 안에 있을 때만 분수 이동 안내
+  return h('div', { 'class': 'card' }, [h('button', { 'class': 'link', style: 'padding:0 0 10px', text: '← 시험 목록', onclick: h5Back })].concat(h5Head(t)).concat([
+    h('div', { 'class': 'cls', style: 'margin:6px 0 2px', text: cv.ch ? 'ㄱㄴㄷ 문항이에요. 옳은 것을 모두 누르세요.' : '번호를 누르고 아래 버튼으로 답을 넣으세요.' }),
+    !cv.ch && cv.foc ? h('div', { 'class': 'frhint', text: '분수 버튼을 또 누르면 분모 → 분자 → 분수 밖으로 이동해요' }) : null,
     uiAnsForm(H.form, renderH5View),
     h('button', { 'class': 'submit', text: '제출 전 확인', onclick: function () {
       var bad = [];
@@ -1139,7 +1286,7 @@ function h5NickCard() {
   inp.value = H.nickDraft;
   inp.oninput = function () { H.nickDraft = inp.value; };
   return h('div', { 'class': 'card' }, [
-    h('button', { 'class': 'link', style: 'padding:0 0 10px', text: '← 돌아가기', onclick: h5Back }),
+    h('button', { 'class': 'link', style: 'padding:0 0 10px', text: '← 시험 목록', onclick: h5Back }),
     h('div', { 'class': 'lbl', text: H.d.nick ? '닉네임 바꾸기' : '먼저 닉네임을 정해 주세요' }),
     h('div', { 'class': 'cls', text: H.d.title + ' 순위표에는 이름 대신 닉네임이 보여요. 2~8자, 나중에 언제든 바꿀 수 있어요.' }),
     inp,
@@ -1199,9 +1346,14 @@ function h5Pdf(c) {
     : h('div', { 'class': 'cls', style: 'text-align:center;margin-top:12px', text: '문제·해설은 곧 올라와요.' });
 }
 
+function h5Older(c) {   // v9: c보다 이전 시험들 (최신순) — 지난 시험 결과에서도 비교·그래프가 그때 기준
+  var all = [H.d.current].concat(H.d.history || []), i = all.indexOf(c);
+  return i < 0 ? (H.d.history || []) : all.slice(i + 1);
+}
 function h5Result(c) {
+  var OLD = h5Older(c), isCur = c === H.d.current;
   var need = Math.min(c.total, Math.max(3, Math.ceil(c.total / 2))), full = c.count >= need;   // v8_1127-4: 반 절반(최소 3명)이 내면 정답률·칭찬
-  var prev = null; (H.d.history || []).some(function (t) { if (t.submitted) { prev = t; return true; } return false; });
+  var prev = null; OLD.some(function (t) { if (t.submitted) { prev = t; return true; } return false; });
   var chips = [];
   if (prev) {
     var df = c.score - prev.score;
@@ -1216,32 +1368,31 @@ function h5Result(c) {
       full && rates[k] === minR && minR < 100 ? h('span', { 'class': 'hard', text: '최고 난도' }) : null]);
   }));
   var note = null;
-  if (!full) note = h('div', { 'class': 'rwait' }, [h('span', { text: '아직 ' + c.count + '명이 냈어요 · 반 친구 절반이 내면 정답률이 보여요' }), h5RefBtn(true)]);
+  if (!full) note = h('div', { 'class': 'rwait' }, [h('span', { text: (isCur ? '아직 ' : '') + c.count + '명이 냈어요 · 반 친구 절반이 내면 정답률이 보여요' }), isCur ? h5RefBtn(true) : null]);
   else {
     var best = -1;
     c.marks.forEach(function (ok, k) { if (ok && rates[k] <= 50 && (best < 0 || rates[k] < rates[best])) best = k; });
     if (best >= 0) note = h('div', { 'class': 'rnote', text: '👏 ' + (best + 1) + '번은 우리 반 ' + c.right[best] + '명만 맞힌 문제예요' });
   }
   var kids = [
-    h('div', { 'class': 'h5t' }, [h('span', { 'class': 'h5b' }, [h('img', { 'class': 'h5ic', src: H5_ICON, alt: '' }), document.createTextNode(h5Full() + ' 결과')]), h5RefBtn()]),
-    h('div', { 'class': 'rsub' }, [h('span', { 'class': 'h5n', text: c.title || '' }), h('span', { 'class': 'cls', text: c.date })])
+    h('div', { 'class': 'h5t' }, [h('span', { 'class': 'rtt' }, [h('b', { text: c.title || h5Full() }), h('span', { 'class': 'cls', text: ' · ' + c.date })]), isCur ? h5RefBtn() : null])   // v9: 제목 = 시험 이름 · 날짜 (탭 이름과 겹치는 'H5 하이파이브 결과' 뺌)
   ].concat([
     h('div', { 'class': 'score' }, [h('b', { text: String(c.score) }), h('span', { text: ' / 5' })]),
-    h('div', { 'class': 'rank', text: c.count + '명 중 ' + c.rank + '등' }),
+    c.late ? h('div', { 'class': 'rank late', text: '늦게 낸 답이라 순위에는 안 들어가요' }) : h('div', { 'class': 'rank', text: c.count + '명 중 ' + c.rank + '등' }),
     h('div', { 'class': 'rcmp' }, chips),
     marks, note,
     h('div', { 'class': 'cheer' + (c.score === 5 ? ' big' : ''), text: c.cheer }),
     h5Pdf(c)
   ]);
   // 내 H5 기록: 최근 5개 (오늘 포함), 막대 = 내 점수, 점선 = 그날 반 평균
-  var recent = [c].concat(H.d.history || []).slice(0, 5).reverse();
+  var recent = [c].concat(OLD).slice(0, 5).reverse();
   if (recent.length > 1) {
     kids.push(h('div', { 'class': 'sec', text: '내 ' + h5Full() + ' 기록' }));
     var chart = h('div', { 'class': 'tchart' }); chart.innerHTML = h5ChartSvg(recent, c);
     kids.push(chart);
     kids.push(h('div', { 'class': 'tleg' }, [h('span', { 'class': 'lg me' }), document.createTextNode('내 점수'), h('span', { 'class': 'lg av' }), document.createTextNode('반 평균')]));
-    var streak = 0; [c].concat(H.d.history || []).some(function (t) { if (t.submitted) { streak++; return false; } return true; });
-    var prevMax = -1; (H.d.history || []).forEach(function (t) { if (t.submitted && t.score > prevMax) prevMax = t.score; });
+    var streak = 0; [c].concat(OLD).some(function (t) { if (t.submitted) { streak++; return false; } return true; });
+    var prevMax = -1; OLD.forEach(function (t) { if (t.submitted && t.score > prevMax) prevMax = t.score; });
     var bd = [];
     if (streak >= 2) bd.push(h('span', { 'class': 'bdg o', text: '🔥 ' + streak + '회 연속 응시' }));
     if (prevMax >= 0 && c.score > prevMax) bd.push(h('span', { 'class': 'bdg', text: '🏆 개인 최고 기록' }));
@@ -1250,7 +1401,7 @@ function h5Result(c) {
   kids.push(h('div', { 'class': 'sec', text: '점수별 인원' }));
   var mx = 1; c.dist.forEach(function (x) { if (x.n > mx) mx = x.n; });
   c.dist.forEach(function (x) {
-    var mine = x.score === c.score;
+    var mine = x.score === c.score && !c.late;
     kids.push(h('div', { 'class': 'dl' + (mine ? ' mine' : '') + (!x.n ? ' zero' : '') }, [
       h('span', { 'class': 's', text: x.score + '점' }), h('span', { 'class': 'bw' }, [h('i', { style: 'width:' + Math.round(x.n / mx * 100) + '%' })]), h('span', { 'class': 'n', text: x.n + '명' })
     ]));
@@ -1263,9 +1414,7 @@ function h5Result(c) {
       h('span', { 'class': 'md', text: MED[x.rank] || '' }), h('span', { 'class': 'rk', text: x.rank + '등' }), h('span', { text: x.nick + (x.mine ? ' (나)' : '') }), h('span', { 'class': 'sc', text: x.score + '점' })
     ]));
   });
-  kids.push(h('div', { 'class': 'who' }, [
-    h('button', { 'class': 'link', text: '닉네임 바꾸기 (' + (H.d.nick || '-') + ')', onclick: function () { H.after = null; H.nickDraft = null; H.msg = ''; H.view = 'nick'; render(); window.scrollTo(0, 0); } })
-  ]));
+  // v9: 닉네임 바꾸기는 H5 목록 맨 아래로 옮김
   return h('div', { 'class': 'card h5' }, kids);
 }
 
@@ -1311,8 +1460,47 @@ document.addEventListener('visibilitychange', function () {
   if (document.visibilityState !== 'visible' || S.screen !== 'app' || !S.name || !H.d || H.view || H.busy || H.nickBusy) return;
   if (Date.now() - H5_SYNC_AT < 20000) return;
   H5_SYNC_AT = Date.now();
-  h5Load(function () { if (!H.view && S.screen === 'app') render(); });
+  var prevId = H.d && H.d.current ? H.d.current.id : null;
+  h5Load(function () { if (!H.view && S.screen === 'app') { h5AutoTab(prevId); render(); window.scrollTo(0, 0); } });
 });
+
+/* v9: 선생님이 [시험 시작]을 누른 뒤 학생이 앱을 켜면 바로 H5 탭.
+   오늘 시작한 시험을 아직 안 냈을 때만. 보던 화면(캐시)에 없던 새 시험이 늦게 도착해도 H5 탭으로 넘김 */
+function h5Fresh() { var c = H.d && H.d.current; return !!(c && c.today && !c.submitted); }
+function h5AutoTab(prevId) {
+  var c = H.d && H.d.current;
+  if (c && c.id !== prevId && h5Fresh() && !H.view) { S.tab = 'h5'; H.sel = null; }
+}
+/** v9: H5 탭 첫 화면 = 시험 목록 (지금 시험은 맨 위에 눈에 띄게, 지난 시험은 아래로) */
+function h5StatChip(t) {   // 목록은 단순하게: 제출 완료 / 미응시 / (지금 시험) 답 입력하기
+  if (t.submitted) return h('span', { 'class': 'pchip c1', text: '제출 완료 ✓' });   // (예전 칩, 지금은 stMark 사용)
+  return t === H.d.current ? h('span', { 'class': 'pchip todo', text: '답 입력하기' }) : h('span', { 'class': 'pchip c0', text: '미응시' });
+}
+function h5Pick(t) {
+  return function () {
+    if (!t.submitted && t === H.d.current) { H.sel = t.id; h5Open(t.id); return; }   // 안 낸 지금 시험은 바로 답 입력
+    H.sel = t.id; render(); window.scrollTo(0, 0);
+  };
+}
+function h5List(a) {
+  var c = H.d.current;
+  a.appendChild(h('div', { 'class': 'lblx', text: '이번 시험' }));
+  a.appendChild(curCard({ tag: c.submitted ? '최근 시험' : c.today ? '오늘 시험' : '아직 안 냄', tagCls: c.submitted ? '' : c.today ? 'new' : 'old', date: c.date, done: c.submitted,
+    title: c.title || h5Full(), btn: c.submitted ? '결과 보기' : '답 입력하기', onclick: h5Pick(c) }));
+  var pl = pastList('지난 시험', (H.d.history || []).map(function (t) { return { title: t.title || h5Full(), date: t.date, done: t.submitted, no: '미응시', onclick: h5Pick(t) }; }));
+  if (pl) a.appendChild(pl);
+  a.appendChild(whoRow(true));
+}
+function h5Detail(a) {
+  var t = H.d.current && H.d.current.id === H.sel ? H.d.current : (H.d.history || []).filter(function (x) { return x.id === H.sel; })[0];
+  a.appendChild(h('button', { 'class': 'backl', text: '← 시험 목록', onclick: function () { H.sel = null; render(); window.scrollTo(0, 0); } }));
+  if (!t) { a.appendChild(h('div', { 'class': 'card' }, [h('div', { 'class': 'cls', text: '시험을 찾지 못했어요.' })])); return; }
+  if (t.submitted) { a.appendChild(h5Result(t)); return; }
+  a.appendChild(h('div', { 'class': 'card h5' }, h5Head(t).concat([
+    h('div', { 'class': 'cls', style: 'margin-top:6px', text: t === H.d.current ? '종이에 푼 답 5개를 입력해서 제출하면 채점 결과가 나와요.' : '아직 안 낸 시험이에요. 지금 풀어서 내면 채점해 줘요. (늦게 낸 답은 순위에는 안 들어가요)' }),
+    h('button', { 'class': 'submit', style: 'margin-top:12px', text: t === H.d.current ? '답 입력하기' : '지금 응시하기', onclick: function () { h5Open(t.id); } })
+  ])));
+}
 
 function h5History() {
   if (!H.d || !H.d.history || !H.d.history.length) return null;
@@ -1371,7 +1559,8 @@ function myCard() {
       h('div', { 'class': 'mybox' }, [h('b', { style: m.monthDone ? '' : 'color:#8a8f98', text: m.monthDone + '/' + m.monthTotal + '회' }), h('span', { text: m.monthLabel + ' 숙제 다 함' })])
     ]),
     h('div', { 'class': 'cheer' + (m.cheer.indexOf('🎉') === 0 || m.cheer.indexOf('모두 해냈') >= 0 ? ' big' : ''), text: m.cheer }),
-    m.cal ? calBox(m.cal) : null
+    m.cal ? h('button', { 'class': 'calt', text: S.calOpen ? '달력 접기 ▴' : Number(m.cal.ym.slice(5, 7)) + '월 숙제 달력 보기 ▾', onclick: function () { S.calOpen = !S.calOpen; render(); } }) : null,
+    m.cal && S.calOpen ? calBox(m.cal) : null
   ]);
 }
 /* v8_1127-4: 이번 달 숙제 달력 (숙제 기한 날에 칸 색칠) */
@@ -1419,9 +1608,7 @@ function peerCard() {
   }
   c.appendChild(h('div', { 'class': 'sec2', text: '많이 물어본 문항' }));
   if (!pr.items.length) { c.appendChild(h('div', { 'class': 'cls', text: '아직 질문한 문항이 없어요.' })); return c; }
-  // 내가 질문한 문항 중 다른 친구도 많이 질문한 것 → 공감 한 줄
-  var mx = null; pr.items.forEach(function (it) { if (it.mine && it.count >= 2 && (!mx || it.count > mx.count)) mx = it; });
-  if (mx) c.appendChild(h('div', { 'class': 'peerme', text: '👀 ' + mx.name + '은 나 말고도 ' + (mx.count - 1) + '명이 질문했어요 · 혼자만 어려운 게 아니에요' }));
+  // v9: '나 말고도 N명…' 공감 문구는 뺌 (아래 목록에 문항·인원·'나도'가 이미 보임)
   var top = pr.items.slice(0, 5), rest = pr.items.slice(5), maxc = Math.max(1, pr.items[0].count);
   function row(it, i) {
     var w = Math.max(6, Math.round(it.count / maxc * 100));
@@ -1430,7 +1617,7 @@ function peerCard() {
       h('span', { 'class': 'nm', text: it.name }),
       h('span', { 'class': 'w' }, [h('span', { 'class': 'f', style: 'width:' + w + '%' })]),
       h('span', { 'class': 'c', text: it.count + '명' }),
-      it.mine ? h('span', { 'class': 'me', text: '나도' }) : null
+      h('span', { 'class': 'me' + (it.mine ? '' : ' ph'), text: '나도' })
     ]);
   }
   top.forEach(function (it, i) { c.appendChild(row(it, i)); });
@@ -1460,7 +1647,7 @@ function submit() {
     } else if (r && r.reason === 'auth') {
       S.saved = prevSaved;
       authLost(r);
-    } else if (r && r.reason === 'round') {
+    } else if (r && (r.reason === 'round' || r.reason === 'closed')) {   // v9: 'closed' = 자정이 지나 수업일이 끝남 → 다시 불러와 보기만 화면
       center(r.message); setTimeout(start, 1500);
     } else {
       undo('⚠️ 제출이 저장되지 않았어요. ' + ((r && r.message) || '다시 눌러 주세요.'));

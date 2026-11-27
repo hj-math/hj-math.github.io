@@ -134,7 +134,7 @@ a.line{display:block;color:#1a73e8}
 <body><div class="wrap" id="app"><div class="center">불러오는 중…</div></div>
 <script>
 window.SHELL = true;
-var SHELL_EXEC = "https://script.google.com/macros/s/AKfycbxjb1lhGBwB_EK6MaEa2hzrxqkjD56IYyRwzgLrKzq2Qv6nVJBbD0pZ1dUdG6jf0qjj/exec", SHELL_VER = "v8_1127-4", SHELL_T0 = Date.now();
+var SHELL_EXEC = "https://script.google.com/macros/s/AKfycbxjb1lhGBwB_EK6MaEa2hzrxqkjD56IYyRwzgLrKzq2Qv6nVJBbD0pZ1dUdG6jf0qjj/exec", SHELL_VER = "v9_1128", SHELL_T0 = Date.now();
 ['pointerdown', 'keydown'].forEach(function (ev) { window.addEventListener(ev, function () { window.__touched = true; }, true); });
 // 새 버전 확인: 구글 응답의 버전(v)이 이 화면 버전과 다르면 → 새 화면을 받아 저장하고 바로 새로 고침
 // (열자마자면 바로, 쓰는 중이면 입력이 날아가지 않게 위에 '새로 고침' 띠만 띄움)
@@ -529,6 +529,7 @@ function tExtra(d) {
 }
 function tHist(name) { var c = T.d && T.cache[T.d.cls.code], x = (T.d && T.d.extra) || (c && c.extra); return x && x.hist ? x.hist[name] : null; }
 function tPins() { var c = T.d && T.cache[T.d.cls.code], x = (T.d && T.d.extra) || (c && c.extra); return x && x.pins ? x.pins : null; }
+var T_FLUSH = false;   // v9: [새로고침]을 눌렀을 때만 서버 캐시 비움
 function load(keepMsg, given) {
   if (!keepMsg) T.msg = '';
   if (given && given.ok) {   // v8: 저장 응답에 새 데이터가 같이 옴 → 요청 없이 바로
@@ -551,7 +552,8 @@ function load(keepMsg, given) {
     if (!rid && hit && T.roundId !== shown) return;   // 그사이 다른 회차를 눌렀으면 화면은 그대로
     show(d);
   }).withFailureHandler(function (e) { T.loading = false; if (!T.d) center('연결 오류: ' + (e && e.message ? e.message : '')); else render(); })
-    .apiTeacher(KEY, want, rid);
+    .apiTeacher(KEY, want, rid, T_FLUSH ? 1 : 0);
+  T_FLUSH = false;
   var shown = T.roundId;
   function show(d) {
     T.d = d; T.code = d.cls.code; T.roundId = d.round ? d.round.id : null;
@@ -656,7 +658,7 @@ function roundCard() {
     sel.appendChild(o);
   });
   var kids = [
-    h('button', { 'class': 'refresh', text: '새로고침', onclick: function () { load(); } }),
+    h('button', { 'class': 'refresh', text: '새로고침', onclick: function () { T_FLUSH = true; load(); } }),
     h('div', { 'class': 'sub', text: d.cls.name + (r.current ? ' · 진행 중 회차' : ' · 지난 회차') + ' · ' + r.start + ' 시작' })
   ];
   r.parts.forEach(function (p) { kids.push(h('div', { 'class': 'big', text: p.label + ' (' + p.from + '~' + p.to + '번)' })); });
@@ -956,7 +958,8 @@ function h5Load(keepMsg) {
     if (!r || !r.ok) { TH.d = null; TH.msg = r ? r.message : '오류가 발생했어요.'; TH.msgCls = 'red'; render(); return; }
     TH.d = r; TH.testId = r.test ? r.test.id : null; TH.cache[code] = r; render();
   }).withFailureHandler(function (e) { TH.msg = '연결 오류: ' + (e && e.message ? e.message : ''); TH.msgCls = 'red'; render(); })
-    .apiTeacherH5(KEY, T.d.cls.code, TH.testId || '');
+    .apiTeacherH5(KEY, T.d.cls.code, TH.testId || '', T_FLUSH ? 1 : 0);
+  T_FLUSH = false;
 }
 
 /** 서버 작업 공통: 저장 → 성공 문구 → 다시 불러오기 */
@@ -983,7 +986,7 @@ function h5Tab() {
   if (!TH.d) { wrap.appendChild(h('div', { 'class': 'card center', text: TH.msg || '불러오는 중…' })); return wrap; }
   var D = TH.d, t = D.test;
   var top = h('div', { 'class': 'card' }, [
-    h('button', { 'class': 'refresh', text: '새로고침', onclick: function () { h5Load(); } }),
+    h('button', { 'class': 'refresh', text: '새로고침', onclick: function () { T_FLUSH = true; h5Load(); } }),
     h('div', { 'class': 'big', text: (D.title === 'H5' ? 'H5 하이파이브' : D.title) + ' · ' + T.d.cls.name })
   ]);
   if (D.tests.length) {
@@ -1099,7 +1102,7 @@ function h5StudentsCard() {
         s.submitted ? h('span', { 'class': 'okx', text: s.marks.map(function (m) { return m ? '○' : '×'; }).join(' ') }) : null,
         h('span', { 'class': 'muted', text: '  ' + (s.nick || '닉네임 없음') })
       ]),
-      s.time ? h('span', { 'class': 'tm', text: (s.by === '선생님' ? '대신 입력 · ' : '') + s.time }) : null
+      s.time ? h('span', { 'class': 'tm', text: (s.late ? '늦게 냄(순위 제외) · ' : '') + (s.by === '선생님' ? '대신 입력 · ' : '') + s.time }) : null
     ]));
     if (open) c.appendChild(h5StuPanel(s));
   });
