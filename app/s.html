@@ -255,7 +255,7 @@ body.hasnav{padding-bottom:84px}.bnav{position:fixed;left:0;right:0;bottom:0;z-i
 <body><div class="wrap" id="app"><div class="center">불러오는 중…</div></div>
 <script>
 window.SHELL = true;
-var SHELL_EXEC = "https://script.google.com/macros/s/AKfycbxjb1lhGBwB_EK6MaEa2hzrxqkjD56IYyRwzgLrKzq2Qv6nVJBbD0pZ1dUdG6jf0qjj/exec", SHELL_VER = "v9_1128-2", SHELL_T0 = Date.now();
+var SHELL_EXEC = "https://script.google.com/macros/s/AKfycbxjb1lhGBwB_EK6MaEa2hzrxqkjD56IYyRwzgLrKzq2Qv6nVJBbD0pZ1dUdG6jf0qjj/exec", SHELL_VER = "v9_1128-3", SHELL_T0 = Date.now();
 ['pointerdown', 'keydown'].forEach(function (ev) { window.addEventListener(ev, function () { window.__touched = true; }, true); });
 // 새 버전 확인: 구글 응답의 버전(v)이 이 화면 버전과 다르면 → 새 화면을 받아 저장하고 바로 새로 고침
 // (열자마자면 바로, 쓰는 중이면 입력이 날아가지 않게 위에 '새로 고침' 띠만 띄움)
@@ -749,7 +749,7 @@ function headCard(withWho) {
     kids.push(h('div', { 'class': 'due' + (d.round.overdue ? ' old' : ''), text: d.round.due + (inApp ? ' 숙제' : ' 수업까지 숙제') }));
     if (d.round.overdue) kids.push(h('div', { 'class': 'old-note', text: '수업일이 지나서 이제 내거나 고칠 수 없어요.' }));
   }
-  kids.push(h('div', { 'class': 'parts', text: d.round.parts.map(function (p) { return p.label + '  ' + p.from + '~' + p.to + '번'; }).join('\n') }));
+  kids.push(h('div', { 'class': 'parts', text: d.round.parts.map(function (p) { return p.label + '  ' + (p.rt || p.from + '~' + p.to) + '번'; }).join('\n') }));
   if (d.notice) kids.push(h('div', { 'class': inApp ? 'notice2' : 'notice', text: d.notice }));   // v9: 숙제 화면에서는 작은 글씨
   if (withWho && !inApp) kids.push(h('div', { 'class': 'who' }, [
     h('span', {}, [h('span', { text: S.name }), S.temp && !DEMO ? h('span', { 'class': 'tmpb', text: '기억 안 함' }) : null]),
@@ -1012,9 +1012,9 @@ function render() {
 
   card.appendChild(h('div', { 'class': 'lbl', style: 'margin-top:20px;margin-bottom:2px', text: '질문할 번호를 누르세요' }));
   d.round.parts.forEach(function (part, p) {
-    if (d.round.parts.length > 1) card.appendChild(h('div', { 'class': 'plbl', text: part.label + ' (' + part.from + '~' + part.to + '번)' }));
+    if (d.round.parts.length > 1) card.appendChild(h('div', { 'class': 'plbl', text: part.label + ' (' + (part.rt || part.from + '~' + part.to) + '번)' }));
     var tiles = h('div', { 'class': 'tiles' });
-    for (var n = part.from; n <= part.to; n++) (function (q) {
+    for (var n = part.from; n <= part.to; n++) if ((part.segs || [[part.from, part.to]]).some(function (g) { return n >= g[0] && n <= g[1]; })) (function (q) {
       var k = keyOf(p, q);
       tiles.appendChild(h('button', {
         'class': 't' + (S.sel[k] ? ' on' : ''), text: String(q),
@@ -1140,7 +1140,7 @@ function hwList(a) {
   var r = S.d.round, go = function (id) { return function () { S.hw = id; render(); window.scrollTo(0, 0); }; };
   a.appendChild(h('div', { 'class': 'lblx', text: '이번 숙제' }));
   a.appendChild(curCard({ tag: r.overdue ? '마감' : '진행 중', tagCls: r.overdue ? 'old' : '', date: r.due || '', done: !!S.saved, alt: r.overdue,
-    title: r.parts.map(function (p) { return p.label + ' ' + p.from + '~' + p.to + '번'; }).join(', '),
+    title: r.parts.map(function (p) { return p.label + ' ' + (p.rt || p.from + '~' + p.to) + '번'; }).join(', '),
     btn: r.overdue ? (S.saved ? '내 질문 보기' : '숙제 보기') : S.saved ? '내 질문 보기·수정' : '질문하기', onclick: go('cur') }));
   var pl = pastList('지난 숙제', (S.past || []).map(function (x) { return { title: x.parts, date: x.due, done: !!x.prog, onclick: go(x.id) }; }));
   if (pl) a.appendChild(pl);

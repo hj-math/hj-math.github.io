@@ -134,7 +134,7 @@ a.line{display:block;color:#1a73e8}
 <body><div class="wrap" id="app"><div class="center">불러오는 중…</div></div>
 <script>
 window.SHELL = true;
-var SHELL_EXEC = "https://script.google.com/macros/s/AKfycbxjb1lhGBwB_EK6MaEa2hzrxqkjD56IYyRwzgLrKzq2Qv6nVJBbD0pZ1dUdG6jf0qjj/exec", SHELL_VER = "v9_1128-2", SHELL_T0 = Date.now();
+var SHELL_EXEC = "https://script.google.com/macros/s/AKfycbxjb1lhGBwB_EK6MaEa2hzrxqkjD56IYyRwzgLrKzq2Qv6nVJBbD0pZ1dUdG6jf0qjj/exec", SHELL_VER = "v9_1128-3", SHELL_T0 = Date.now();
 ['pointerdown', 'keydown'].forEach(function (ev) { window.addEventListener(ev, function () { window.__touched = true; }, true); });
 // 새 버전 확인: 구글 응답의 버전(v)이 이 화면 버전과 다르면 → 새 화면을 받아 저장하고 바로 새로 고침
 // (열자마자면 바로, 쓰는 중이면 입력이 날아가지 않게 위에 '새로 고침' 띠만 띄움)
@@ -661,7 +661,7 @@ function roundCard() {
     h('button', { 'class': 'refresh', text: '새로고침', onclick: function () { T_FLUSH = true; load(); } }),
     h('div', { 'class': 'sub', text: d.cls.name + (r.current ? ' · 진행 중 회차' : ' · 지난 회차') + ' · ' + r.start + ' 시작' })
   ];
-  r.parts.forEach(function (p) { kids.push(h('div', { 'class': 'big', text: p.label + ' (' + p.from + '~' + p.to + '번)' })); });
+  r.parts.forEach(function (p) { kids.push(h('div', { 'class': 'big', text: p.label + ' (' + (p.rt || p.from + '~' + p.to) + '번)' })); });
   if (r.due) kids.push(h('div', { 'class': 'due' + (r.overdue && r.current ? ' old' : ''), text: r.due + ' 수업까지' + (r.overdue && r.current ? ' · 기한 지남' : '') }));
   kids.push(sel);
   kids.push(h('div', { 'class': 'metrics' }, [
@@ -850,7 +850,7 @@ function setTab() {
   var r = d.round && d.round.current ? d.round : null;
   var edit = T.mode === 'edit' && r;
   if (!T.form) {
-    var copyParts = r ? r.parts.map(function (p) { return { label: p.label, from: String(p.from), to: String(p.to) }; }) : [{ label: '', from: '1', to: '' }];
+    var copyParts = r ? [].concat.apply([], r.parts.map(function (p) { return (p.segs || [[p.from, p.to]]).map(function (g) { return { label: p.label, from: String(g[0]), to: String(g[1]) }; }); })) : [{ label: '', from: '1', to: '' }];
     T.form = edit ? { parts: copyParts, due: r.dueISO || d.nextDue } : { parts: copyParts, due: d.nextDue };
   }
   var F = T.form, wrap = h('div');
