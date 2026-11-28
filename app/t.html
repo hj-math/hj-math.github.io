@@ -134,7 +134,7 @@ a.line{display:block;color:#1a73e8}
 <body><div class="wrap" id="app"><div class="center">불러오는 중…</div></div>
 <script>
 window.SHELL = true;
-var SHELL_EXEC = "https://script.google.com/macros/s/AKfycbxjb1lhGBwB_EK6MaEa2hzrxqkjD56IYyRwzgLrKzq2Qv6nVJBbD0pZ1dUdG6jf0qjj/exec", SHELL_VER = "v9_1128", SHELL_T0 = Date.now();
+var SHELL_EXEC = "https://script.google.com/macros/s/AKfycbxjb1lhGBwB_EK6MaEa2hzrxqkjD56IYyRwzgLrKzq2Qv6nVJBbD0pZ1dUdG6jf0qjj/exec", SHELL_VER = "v9_1128-2", SHELL_T0 = Date.now();
 ['pointerdown', 'keydown'].forEach(function (ev) { window.addEventListener(ev, function () { window.__touched = true; }, true); });
 // 새 버전 확인: 구글 응답의 버전(v)이 이 화면 버전과 다르면 → 새 화면을 받아 저장하고 바로 새로 고침
 // (열자마자면 바로, 쓰는 중이면 입력이 날아가지 않게 위에 '새로 고침' 띠만 띄움)
@@ -629,7 +629,7 @@ function render() {
   var tabs = h('div', { 'class': 'tabs' });
   [['q', '질문'], ['s', '학생'], ['st', '통계'], ['set', '회차·링크'], ['h5', d.h5Name || 'H5']].forEach(function (t) {
     tabs.appendChild(h('button', { 'class': T.tab === t[0] && !T.hist ? 'on' : '', text: t[1], onclick: function () {
-      T.tab = t[0]; T.hist = null; T.confirmNew = false; T.msg = ''; T.justStarted = false; T.mode = 'new'; T.form = null;
+      T.tab = t[0]; T.hist = null; T.confirmNew = false; T.dup = false; T.msg = ''; T.justStarted = false; T.mode = 'new'; T.form = null;
       if (t[0] === 'h5') { TH.mode = 'view'; TH.form = null; TH.open = null; TH.confirm = ''; TH.msg = ''; h5Load(); }
       render();
     } }));
@@ -874,16 +874,17 @@ function setTab() {
   });
   partsBox.appendChild(h('button', { 'class': 'add', text: '+ 범위 추가', onclick: function () { F.parts.push({ label: '', from: '1', to: '' }); render(); } }));
 
-  function send(mode) {
-    T.msg = '저장하는 중…'; T.msgCls = 'muted'; render();
+  function send(mode, force) {
+    T.msg = '저장하는 중…'; T.msgCls = 'muted'; T.dup = false; render();
     google.script.run.withSuccessHandler(function (res) {
       T.confirmNew = false;
+      if (res && res.reason === 'dup') { T.dup = true; T.msg = res.message; T.msgCls = 'red'; render(); return; }   // v9_1128-2
       if (res && res.ok) {
         T.msg = mode === 'new' ? '새 회차를 시작했어요. 학생 화면에 바로 반영돼요.' : '현재 회차를 수정했어요.'; T.msgCls = 'green';
         T.justStarted = mode === 'new'; T.roundId = null; T.form = null; T.mode = 'new'; load(true, res.d);
       } else { T.msg = (res && res.message) || '저장하지 못했어요.'; T.msgCls = 'red'; render(); }
     }).withFailureHandler(function (e) { T.msg = '연결 오류: ' + (e && e.message ? e.message : ''); T.msgCls = 'red'; render(); })
-      .apiTeacherRound(KEY, d.cls.code, mode, F.parts, F.due);
+      .apiTeacherRound(KEY, d.cls.code, mode, F.parts, F.due, force ? 1 : 0);
   }
 
   var kids;
@@ -913,6 +914,10 @@ function setTab() {
     ];
   }
   if (T.msg) kids.push(h('div', { 'class': 'msg ' + T.msgCls, text: T.msg }));
+  if (!edit && T.dup) kids.push(h('div', { 'class': 'btns' }, [   // v9_1128-2: 똑같은 숙제 다시 등록 확인
+    h('button', { 'class': 'b', text: '취소', onclick: function () { T.dup = false; T.msg = ''; render(); } }),
+    h('button', { 'class': 'b warn', text: '그래도 새로 등록', onclick: function () { send('new', true); } })
+  ]));
   if (!edit && T.justStarted && d.kakaoHw) kids.push(h('button', { 'class': 'b pri', style: 'width:100%;margin-top:10px', text: '숙제 알림 복사 (카톡에 붙여넣기)', onclick: function () { copy(d.kakaoHw); } }));
   if (!edit && cur) kids.push(h('button', { 'class': 'link', style: 'margin-top:14px;padding:0;font-size:13px;color:#1a73e8;background:none;border:none;cursor:pointer', text: '지금 회차 범위·기한 수정 →', onclick: function () { switchMode('edit'); } }));
   wrap.appendChild(h('div', { 'class': 'card' }, kids));

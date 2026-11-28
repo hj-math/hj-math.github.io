@@ -255,7 +255,7 @@ body.hasnav{padding-bottom:84px}.bnav{position:fixed;left:0;right:0;bottom:0;z-i
 <body><div class="wrap" id="app"><div class="center">불러오는 중…</div></div>
 <script>
 window.SHELL = true;
-var SHELL_EXEC = "https://script.google.com/macros/s/AKfycbxjb1lhGBwB_EK6MaEa2hzrxqkjD56IYyRwzgLrKzq2Qv6nVJBbD0pZ1dUdG6jf0qjj/exec", SHELL_VER = "v9_1128", SHELL_T0 = Date.now();
+var SHELL_EXEC = "https://script.google.com/macros/s/AKfycbxjb1lhGBwB_EK6MaEa2hzrxqkjD56IYyRwzgLrKzq2Qv6nVJBbD0pZ1dUdG6jf0qjj/exec", SHELL_VER = "v9_1128-2", SHELL_T0 = Date.now();
 ['pointerdown', 'keydown'].forEach(function (ev) { window.addEventListener(ev, function () { window.__touched = true; }, true); });
 // 새 버전 확인: 구글 응답의 버전(v)이 이 화면 버전과 다르면 → 새 화면을 받아 저장하고 바로 새로 고침
 // (열자마자면 바로, 쓰는 중이면 입력이 날아가지 않게 위에 '새로 고침' 띠만 띄움)
@@ -1101,7 +1101,7 @@ function bottomNav() {
 /** v9: 알림 줄 (H5 시험이 있거나 안 낸 시험이 있을 때만). 누르면 H5로 */
 function h5Alert() {
   var c = H.d && H.d.current; if (!c || c.submitted) return null;
-  var t = c.today ? '오늘 ' + h5Full() + ' 시험이 있어요' : '지난 ' + h5Full() + '를 아직 안 냈어요';
+  var t = c.today ? '진행 중인 ' + h5Full() + '가 있어요' : '지난 ' + h5Full() + '를 아직 안 냈어요';
   return h('button', { 'class': 'alertln', onclick: function () { S.tab = 'h5'; h5Pick(c)(); } }, [h('img', { src: H5_ICON, alt: '' }), h('span', { 'class': 'at', text: t }), h('span', { 'class': 'ag', text: (c.today ? '답 입력' : '풀러 가기') + ' →' })]);
 }
 /** v9: 숙제 탭 첫 화면 — '이번 숙제' 카드(큰 버튼 하나) + '지난 숙제' 목록 + 맨 아래 내 이름 */
@@ -1141,7 +1141,7 @@ function hwList(a) {
   a.appendChild(h('div', { 'class': 'lblx', text: '이번 숙제' }));
   a.appendChild(curCard({ tag: r.overdue ? '마감' : '진행 중', tagCls: r.overdue ? 'old' : '', date: r.due || '', done: !!S.saved, alt: r.overdue,
     title: r.parts.map(function (p) { return p.label + ' ' + p.from + '~' + p.to + '번'; }).join(', '),
-    btn: r.overdue ? (S.saved ? '내 제출 보기' : '숙제 보기') : S.saved ? '내 제출 보기 · 고치기' : '질문할 번호 고르기', onclick: go('cur') }));
+    btn: r.overdue ? (S.saved ? '내 질문 보기' : '숙제 보기') : S.saved ? '내 질문 보기·수정' : '질문하기', onclick: go('cur') }));
   var pl = pastList('지난 숙제', (S.past || []).map(function (x) { return { title: x.parts, date: x.due, done: !!x.prog, onclick: go(x.id) }; }));
   if (pl) a.appendChild(pl);
   a.appendChild(whoRow());
@@ -1359,19 +1359,18 @@ function h5Result(c) {
     var df = c.score - prev.score;
     chips.push(df > 0 ? h('span', { 'class': 'rchip up', text: '지난번보다 +' + df + '점 📈' }) : df < 0 ? h('span', { 'class': 'rchip dn', text: '지난번보다 ' + df + '점' }) : h('span', { 'class': 'rchip dn', text: '지난번과 같은 점수' }));
   }
-  chips.push(h('span', { 'class': 'rchip', text: '반 평균 ' + c.avg + '점' }));
+  // v9_1128-2: '반 평균' 칩 뺌 (점수별 인원 밑에 평균 있음)
   var rates = (c.right || []).map(function (n) { return c.count ? Math.round(n / c.count * 100) : 0; });
-  var minR = full && rates.length ? Math.min.apply(null, rates) : 101;
   var marks = h('div', { 'class': 'marks' }, c.marks.map(function (ok, k) {
     return h('span', { 'class': 'mk ' + (ok ? 'o' : 'x') }, [h('small', { text: (k + 1) + '번' }), h('b', { text: ok ? '○' : '×' }),
       full ? h('span', { 'class': 'pr', text: '정답률 ' + rates[k] + '%' }) : null,
-      full && rates[k] === minR && minR < 100 ? h('span', { 'class': 'hard', text: '최고 난도' }) : null]);
+      null]);   // v9_1128-2: '최고 난도' 표시 뺌 (정답률로 보임)
   }));
   var note = null;
   if (!full) note = h('div', { 'class': 'rwait' }, [h('span', { text: (isCur ? '아직 ' : '') + c.count + '명이 냈어요 · 반 친구 절반이 내면 정답률이 보여요' }), isCur ? h5RefBtn(true) : null]);
   else {
     var best = -1;
-    c.marks.forEach(function (ok, k) { if (ok && rates[k] <= 50 && (best < 0 || rates[k] < rates[best])) best = k; });
+    c.marks.forEach(function (ok, k) { if (ok && rates[k] <= 30 && c.right[k] <= 3 && (best < 0 || rates[k] < rates[best])) best = k; });   // v9_1128-2: 정답률 30% 이하 + 맞힌 사람 3명 이하일 때만
     if (best >= 0) note = h('div', { 'class': 'rnote', text: '👏 ' + (best + 1) + '번은 우리 반 ' + c.right[best] + '명만 맞힌 문제예요' });
   }
   var kids = [
@@ -1391,12 +1390,7 @@ function h5Result(c) {
     var chart = h('div', { 'class': 'tchart' }); chart.innerHTML = h5ChartSvg(recent, c);
     kids.push(chart);
     kids.push(h('div', { 'class': 'tleg' }, [h('span', { 'class': 'lg me' }), document.createTextNode('내 점수'), h('span', { 'class': 'lg av' }), document.createTextNode('반 평균')]));
-    var streak = 0; [c].concat(OLD).some(function (t) { if (t.submitted) { streak++; return false; } return true; });
-    var prevMax = -1; OLD.forEach(function (t) { if (t.submitted && t.score > prevMax) prevMax = t.score; });
-    var bd = [];
-    if (streak >= 2) bd.push(h('span', { 'class': 'bdg o', text: '🔥 ' + streak + '회 연속 응시' }));
-    if (prevMax >= 0 && c.score > prevMax) bd.push(h('span', { 'class': 'bdg', text: '🏆 개인 최고 기록' }));
-    if (bd.length) kids.push(h('div', { 'class': 'badges' }, bd));
+    // v9_1128-2: 연속 응시·개인 최고 배지 뺌 (그래프로 보임)
   }
   kids.push(h('div', { 'class': 'sec', text: '점수별 인원' }));
   var mx = 1; c.dist.forEach(function (x) { if (x.n > mx) mx = x.n; });
@@ -1485,7 +1479,7 @@ function h5Pick(t) {
 function h5List(a) {
   var c = H.d.current;
   a.appendChild(h('div', { 'class': 'lblx', text: '이번 시험' }));
-  a.appendChild(curCard({ tag: c.submitted ? '최근 시험' : c.today ? '오늘 시험' : '아직 안 냄', tagCls: c.submitted ? '' : c.today ? 'new' : 'old', date: c.date, done: c.submitted,
+  a.appendChild(curCard({ tag: c.submitted ? '최근 시험' : c.today ? '진행 중' : '아직 안 냄', tagCls: c.submitted ? '' : c.today ? 'new' : 'old', date: c.date, done: c.submitted,
     title: c.title || h5Full(), btn: c.submitted ? '결과 보기' : '답 입력하기', onclick: h5Pick(c) }));
   var pl = pastList('지난 시험', (H.d.history || []).map(function (t) { return { title: t.title || h5Full(), date: t.date, done: t.submitted, no: '미응시', onclick: h5Pick(t) }; }));
   if (pl) a.appendChild(pl);
