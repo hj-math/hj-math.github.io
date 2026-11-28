@@ -82,20 +82,21 @@ h1{font-size:24px;margin:14px 0 2px}.c{color:#667;font-size:15px}
 <div class="card hide" id="kakao"><h2>카톡에서 열었어요</h2><ol><li>오른쪽 위(아이폰은 오른쪽 아래) <b>⋮</b> 또는 <b>공유</b> 누르기</li><li><b>다른 브라우저로 열기</b>(아이폰은 <b>Safari로 열기</b>)</li><li>열린 화면에서 설치하기</li></ol></div>
 <div class="card" id="and"><h2>갤럭시 · 크롬</h2><ol><li>오른쪽 위 <b>⋮</b> 누르기</li><li><b>설치 및 바로가기 만들기</b> → <b>설치</b> (또는 <b>홈 화면에 추가</b>)</li><li>홈 화면의 <b>손바닥 아이콘</b>으로 열기</li></ol></div>
 <div class="card" id="ios"><h2>아이폰 · 사파리</h2><ol><li>오른쪽 아래 <span class="k">···</span> 누르기 → <b>공유</b></li><li>오른쪽 아래 <span class="k">⌄</span> <b>더 보기</b> 누르기</li><li><b>홈 화면에 추가</b> → 오른쪽 위 <b>추가</b></li><li>홈 화면의 <b>손바닥 아이콘</b>으로 열기</li></ol><div class="tip">아래 가운데에 <b>공유</b> 버튼(네모에 ↑)이 보이는 아이폰은 그걸 바로 누르고, 목록을 내려서 <b>홈 화면에 추가</b>를 찾으세요.</div></div>
+<div class="card hide" id="ipad"><h2>아이패드 · 사파리</h2><ol><li>주소창 옆 <b>공유</b> 버튼(네모에 ↑) 누르기<br><span style="font-size:13px;color:#667">안 보이면 주소창의 <span class="k">···</span> → <b>공유</b></span></li><li><b>홈 화면에 추가</b> → <b>추가</b></li><li>홈 화면의 <b>손바닥 아이콘</b>으로 열기</li></ol></div>
 <a class="b sec" id="open" href="#">설치 없이 바로 열기</a>
 </div>
 <script>
 document.getElementById('open').onclick = function (e) { e.preventDefault(); runApp(); };
-var ua = navigator.userAgent, isIOS = /iPhone|iPad|iPod/.test(ua), inKakao = /KAKAOTALK/i.test(ua);
+var ua = navigator.userAgent, isIPad = /iPad/.test(ua) || (/Macintosh/.test(ua) && navigator.maxTouchPoints > 1), isIOS = isIPad || /iPhone|iPod/.test(ua), inKakao = /KAKAOTALK/i.test(ua);   // 아이패드 사파리는 맥이라고 알려 옴 → 터치 화면이면 아이패드
 function show(id, on) { var e = document.getElementById(id); if (!e) return; e.classList.remove('hide'); e.style.display = on ? '' : 'none'; }
-show('ios', isIOS); show('and', !isIOS);
-if (inKakao && typeof HW_GATE !== 'undefined' && HW_GATE) document.getElementById('open').style.display = 'none';   // 카톡 안에서는 설치 없이 열기 숨김 (질문은 앱에서만)   // 아이폰은 아이폰 안내만, 그 밖에는 갤럭시 안내 (설치 버튼이 나오면 안내는 숨김)
+show('ios', isIOS && !isIPad); show('ipad', isIPad); show('and', !isIOS);   // 아이폰은 아이폰 안내만, 그 밖에는 갤럭시 안내 (설치 버튼이 나오면 안내는 숨김)
+if (inKakao && typeof HW_GATE !== 'undefined' && HW_GATE) document.getElementById('open').style.display = 'none';   // 카톡 안에서는 설치 없이 열기 숨김 (질문은 앱에서만)
 if (inKakao && !fromIcon) {   // 카톡 안 브라우저에서는 설치가 안 됨 → 기본 브라우저로 다시 열기
-  show('kakao', true); show('ios', false); show('and', false);
+  show('kakao', true); show('ios', false); show('ipad', false); show('and', false);
   location.href = 'kakaotalk://web/openExternal?url=' + encodeURIComponent(location.href);
 }
 var ev = null;
-window.addEventListener('beforeinstallprompt', function (e) { var b = document.getElementById('inst'); if (!b) return; e.preventDefault(); ev = e; b.classList.remove('hide'); show('and', false); show('ios', false); });
+window.addEventListener('beforeinstallprompt', function (e) { var b = document.getElementById('inst'); if (!b) return; e.preventDefault(); ev = e; b.classList.remove('hide'); show('and', false); show('ios', false); show('ipad', false); });
 window.addEventListener('appinstalled', function () { var b = document.getElementById('inst'); if (b) b.textContent = '✅ 설치됐어요! 홈 화면의 손바닥 아이콘으로 여세요'; });
 document.getElementById('inst').onclick = function () { if (ev) { ev.prompt(); ev = null; } };
 if ('serviceWorker' in navigator) navigator.serviceWorker.register('../sw.js', { scope: '../' }).catch(function () {});
@@ -105,7 +106,7 @@ function gateExternal(e) {   // 설치 안내 화면을 기본 브라우저(크�
   if (e) e.preventDefault();
   var g = document.getElementById('gate'); if (g) g.parentNode.removeChild(g);
   [].forEach.call(document.querySelectorAll('.w > *'), function (x) { x.style.visibility = ''; x.style.position = ''; });
-  show('kakao', true); show('ios', false); show('and', false);
+  show('kakao', true); show('ios', false); show('ipad', false); show('and', false);
   location.href = 'kakaotalk://web/openExternal?url=' + encodeURIComponent(location.origin + location.pathname);
 }
 function gateView(step) {
