@@ -95,8 +95,8 @@ window.addEventListener('beforeinstallprompt', function (e) { var b = document.g
 window.addEventListener('appinstalled', function () { var b = document.getElementById('inst'); if (b) b.textContent = '✅ 설치됐어요! 홈 화면의 손바닥 아이콘으로 여세요'; });
 document.getElementById('inst').onclick = function () { if (ev) { ev.prompt(); ev = null; } };
 if ('serviceWorker' in navigator) navigator.serviceWorker.register('../sw.js', { scope: '../' }).catch(function () {});
-// v9_1128-3+: 카톡에서 숙제 알림 링크(?app=1)를 누르면 앱 대신 안내 (학생 앱만). 질문은 설치한 앱에서만
-var gate = inKakao && fromIcon && typeof HW_GATE !== 'undefined' && HW_GATE;
+// 카톡에서 숙제 알림 링크(?app=1)를 처음 누르면 안내 (학생 앱만): [여기서 바로 하기] 또는 앱으로. 카톡에서 한 번 로그인하면 다음부터 바로 숙제 화면
+var gate = inKakao && fromIcon && typeof HW_GATE !== 'undefined' && HW_GATE && !(ls('h5_ban') && ls('h5_name_' + ls('h5_ban').toLowerCase()));
 function gateExternal(e) {   // 설치 안내 화면을 기본 브라우저(크롬·사파리)로 다시 열기
   if (e) e.preventDefault();
   var g = document.getElementById('gate'); if (g) g.parentNode.removeChild(g);
@@ -114,12 +114,13 @@ function gateView(step) {
   g.innerHTML = step === 2
     ? '<h1 style="margin-top:6px">앱 아이콘으로 열어 주세요</h1><div class="card"><ol><li>카톡을 닫고 <b>홈 화면</b>으로 가기</li><li><b>손바닥 아이콘</b> 누르기</li></ol>'
       + '<div class="ghome"><div><i></i>&nbsp;</div><div><img src="' + ic + '" alt="">' + document.title + '</div><div><i></i>&nbsp;</div><div><i></i>&nbsp;</div></div></div>'
-      + '<a class="glink" id="gnone" href="#">아이콘이 안 보여요 → 설치하기</a>'
-    : '<img class="ic" src="' + ic + '" alt=""><h1>숙제 질문은 앱에서 해요</h1><div class="gq">홈 화면에 이 아이콘이 있나요?</div>'
-      + '<button class="b pri gb" id="gyes">네, 있어요</button><button class="b sec gb" id="gno">아니요, 없어요</button>'
-      + '<div class="note">처음 한 번만 설치하면 다음부터는<br>아이콘만 누르면 돼요</div>';
-  var y = document.getElementById('gyes'); if (y) y.onclick = function () { gateView(2); };
-  var n = document.getElementById('gno') || document.getElementById('gnone'); if (n) n.onclick = gateExternal;
+      + '<a class="glink" id="gnone" href="#">앱이 없어요 → 설치하기</a><a class="glink" id="ghere2" href="#" style="color:#667;font-weight:600">그냥 여기서 할게요</a>'
+    : '<img class="ic" src="' + ic + '" alt=""><h1>숙제 질문</h1><div class="c" style="margin-top:6px">처음 한 번만 반·이름·비밀번호를 넣어요</div>'
+      + '<button class="b pri gb" id="ghere">여기서 바로 하기</button><button class="b sec gb" id="gapp">앱으로 할래요</button>'
+      + '<div class="note">손바닥 앱이 있으면 앱으로 열어도 같은 숙제예요</div>';
+  [['ghere', function () { runApp(); }], ['ghere2', function () { runApp(); }], ['gapp', function () { gateView(2); }], ['gnone', gateExternal]].forEach(function (x) {
+    var el = document.getElementById(x[0]); if (el) el.onclick = function (e) { e.preventDefault(); x[1](e); };
+  });
   window.scrollTo(0, 0);
 }
 if (gate) gateView(1);
